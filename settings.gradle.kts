@@ -8,4 +8,5 @@ pluginManagement {
 
 rootProject.name = "MyOutfitPicker"
 include(":androidApp")
+include(":server")
 include(":shared")

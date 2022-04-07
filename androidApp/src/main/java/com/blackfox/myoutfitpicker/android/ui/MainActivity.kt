@@ -10,6 +10,7 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import androidx.compose.material.*
 
 fun greet(): String {
     return Greeting().greeting()
@@ -38,4 +39,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainLayout() {
     val navController = rememberNavController()
+    MyOutfitPickerTheme() {
+        Text(greet())
+    }
 }

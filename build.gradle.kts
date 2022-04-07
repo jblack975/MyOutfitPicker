@@ -18,6 +18,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://plugins.gradle.org/m2/")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/ktor/eap")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
         maven(url = "https://androidx.dev/snapshots/builds/7909927/artifacts/repository")

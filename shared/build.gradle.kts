@@ -13,6 +13,7 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    jvm()
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -72,7 +73,7 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-//                implementation(Ktor.clientIos)
+                implementation(Ktor.clientIos)
             }
         }
         val iosX64Test by getting
@@ -84,6 +85,12 @@ kotlin {
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
         }
+        val jvmMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-apache:${Versions.ktor}")
+            }
+        }
+
     }
 }
 
@@ -106,7 +113,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 multiplatformSwiftPackage {
-    packageName("FreelanceKit")
+    packageName("MyOutfitPickerKit")
     swiftToolsVersion("5.3")
     targetPlatforms {
         iOS { v("15") }
