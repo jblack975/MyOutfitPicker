@@ -9,6 +9,13 @@ plugins {
 //    id("com.google.cloud.tools.appengine").version("2.4.2")
 }
 
+group = "com.blackfox.myoutfitpicker"
+application {
+    mainClass.set("com.blackfox.myoutfitpicker.ApplicationKt")
+
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
 
 dependencies {
     implementation(project(":shared"))
