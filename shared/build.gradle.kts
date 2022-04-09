@@ -13,7 +13,14 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    jvm()
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+                //useIR = true
+            }
+        }
+    }
 
     cocoapods {
         summary = "Some description for the Shared Module"

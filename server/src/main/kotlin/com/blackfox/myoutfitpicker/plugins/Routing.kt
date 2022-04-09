@@ -10,7 +10,7 @@ fun Application.configureRouting() {
     routing {
         route("/currentWeather") {
             get("{city?}") {
-                call.respondText(Platform().platform, status = HttpStatusCode.OK)
+                call.respondText(try { Platform().platform } catch(e:Throwable) { "Wrong platform called"}, status = HttpStatusCode.OK)
             }
         }
         route("/monthlyForecast") {
