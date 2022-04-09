@@ -23,7 +23,7 @@ val response = client.newCall(request).execute()
  */
 class WeatherApi(private val client: HttpClient,
                  private val baseUrl: String = "https://community-open-weather-map.p.rapidapi.com") {
-    private val apiKey = "c3d2af13b7msh494f812713f91cdp1cdbe4jsn9998c26e66b4"
+    private val apiKey = "somekeyhere"
     private val json = Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
 
     suspend fun retrieveMonthlyForecastByCity(city:String) : MonthlyForecast? {
