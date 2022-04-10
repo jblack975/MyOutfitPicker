@@ -1,8 +1,12 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.*
+import com.codingfeline.buildkonfig.gradle.TargetConfigDsl.*
+
 plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
     id("com.android.library")
     id("org.jetbrains.kotlin.native.cocoapods")
+    id("com.codingfeline.buildkonfig")
     id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
 }
 
@@ -10,9 +14,6 @@ version = "1.0"
 
 kotlin {
     android()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
     jvm {
         compilations.all {
             kotlinOptions {
@@ -21,6 +22,9 @@ kotlin {
             }
         }
     }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -124,5 +128,17 @@ multiplatformSwiftPackage {
     swiftToolsVersion("5.3")
     targetPlatforms {
         iOS { v("15") }
+    }
+}
+
+buildkonfig {
+    packageName = "com.blackfox.myoutfitpicker"
+
+    defaultConfigs {
+        buildConfigField(
+            type = STRING,
+            name = "api_key",
+            value = findProperty("rapidapikey") as? String ?: throw Exception("catsApiKey is not set")
+        )
     }
 }

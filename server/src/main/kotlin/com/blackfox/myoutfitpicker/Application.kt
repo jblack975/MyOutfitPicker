@@ -11,4 +11,5 @@ fun Application.module() {
     configureRouting()
     configureSerialization()
     println(try { Platform().platform } catch(e:Throwable) { "Wrong platform called"})
+    var apikey = Platform().apiKey
 }

@@ -10,6 +10,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import com.blackfox.myoutfitpicker.BuildKonfig
 
 /*
 val request = Request.Builder()
@@ -23,7 +24,7 @@ val response = client.newCall(request).execute()
  */
 class WeatherApi(private val client: HttpClient,
                  private val baseUrl: String = "https://community-open-weather-map.p.rapidapi.com") {
-    private val apiKey = "somekeyhere"
+    private val apiKey = BuildKonfig.api_key
     private val json = Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
 
     suspend fun retrieveMonthlyForecastByCity(city:String) : MonthlyForecast? {
