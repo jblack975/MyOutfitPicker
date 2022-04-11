@@ -1,9 +1,12 @@
 package com.blackfox.myoutfitpicker.di
 
+import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
+import com.blackfox.myoutfitpicker.OutfitPickerStore
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import io.ktor.client.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -24,6 +27,8 @@ fun commonModule() = module {
     single { createHttpClient() }
     single { WeatherApi(get()) }
     single { WeatherRepository() }
+    single { OutfitPickerStore() }
+    single { MyOutfitPickerViewModel() }
 }
 
 fun createHttpClient() = HttpClient {

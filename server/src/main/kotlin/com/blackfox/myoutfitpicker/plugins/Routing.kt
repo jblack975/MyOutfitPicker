@@ -1,8 +1,6 @@
 package com.blackfox.myoutfitpicker.plugins
 
 import com.blackfox.myoutfitpicker.Platform
-import com.blackfox.myoutfitpicker.api.WeatherApi
-import com.blackfox.myoutfitpicker.createHttpClient
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -29,7 +27,7 @@ fun Application.configureRouting() {
         }
     }
 }
-
+/*
 fun Route.currentWeather() {
     get("{city}") {
         val city = call.parameters["city"] ?: ""
@@ -46,3 +44,4 @@ fun Route.monthlyWeather() {
         call.respondText(Json.encodeToString(ret))
     }
 }
+ */

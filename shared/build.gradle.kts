@@ -140,5 +140,15 @@ buildkonfig {
             name = "api_key",
             value = findProperty("rapidapikey") as? String ?: throw Exception("catsApiKey is not set")
         )
+        buildConfigField(
+            type = STRING,
+            name = "weather_client_api_key",
+            value = findProperty("weather_client_api_key") as? String ?: throw Exception("Need a local api key")
+        )
+        buildConfigField(
+            type = STRING,
+            name = "weather_client_host_name",
+            value = findProperty("weather_client_host_name") as? String ?: throw Exception("Need a local host name")
+        )
     }
 }

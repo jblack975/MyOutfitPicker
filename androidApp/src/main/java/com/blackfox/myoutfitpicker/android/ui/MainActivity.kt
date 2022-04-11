@@ -11,6 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import androidx.compose.material.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 
 fun greet(): String {
     return Greeting().greeting()
@@ -25,8 +27,6 @@ class MainActivity : ComponentActivity() {
 
         manager = GlanceAppWidgetManager(this)
 
-        // adding this here just as test for now....need to see where best place to do
-        // this would be
         lifecycleScope.launch {
         }
 
@@ -36,10 +36,37 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+sealed class Screen(val title: String) {
+    object LoginScreen : Screen("Login")
+    object AnonymousSendScreen : Screen("AnonymousSend")
+    object WeatherScreen : Screen("WeatherScreen")
+    object OutfitSelectorScreen : Screen("OutfitSelector")
+    object SettingsScreen : Screen("Settings")
+    object HomeScreen : Screen("Home")
+}
+
 @Composable
 fun MainLayout() {
     val navController = rememberNavController()
     MyOutfitPickerTheme() {
-        Text(greet())
+        NavHost(navController, startDestination = Screen.HomeScreen.title) {
+            composable(Screen.HomeScreen.title) {
+            }
+            composable(Screen.AnonymousSendScreen.title + "/{countryCode}") { backStackEntry ->
+                HomeScreen()
+            }
+            composable(Screen.SettingsScreen.title + "/{networkId}") { backStackEntry ->
+                HomeScreen()
+            }
+            composable(Screen.WeatherScreen.title + "/{networkId}") { backStackEntry ->
+                HomeScreen()
+            }
+            composable(Screen.OutfitSelectorScreen.title + "/{networkId}") { backStackEntry ->
+                HomeScreen()
+            }
+            composable(Screen.LoginScreen.title + "/{networkId}") { backStackEntry ->
+                HomeScreen()
+            }
+        }
     }
 }

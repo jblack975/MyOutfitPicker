@@ -7,12 +7,9 @@ import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class MyOutfitPickerViewModel: SharedViewModel() {
-    var searchCity : String
-        get() = city.toString()
-        set(value) {
-            city = value
-        }
+class MyOutfitPickerViewModel() : SharedViewModel() {
+    private val outfitPickerStore = OutfitPickerStore()
+    var activeUser = outfitPickerStore.fetchActiveUser
 }
 
 @Serializable
