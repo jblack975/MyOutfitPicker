@@ -21,6 +21,6 @@ android/mobile/release/*
 ios.xcworkspace/
 */gradle.properties
 local.propertise
-
+gradle.properties
 .DS_Store
 .externalNativeBuild

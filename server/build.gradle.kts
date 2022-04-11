@@ -24,14 +24,14 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-serialization:${Versions.ktor}")
-//    implementation(Ktor.clientJson)
+    implementation(Ktor.clientJson)
     implementation("io.ktor:ktor-server-call-logging:${Versions.ktor}")
     implementation("io.ktor:ktor-server-content-negotiation-jvm:${Versions.ktor}")
-//    implementation(Ktor.clientSerializationJson)
+    implementation(Ktor.clientSerializationJson)
 
     testImplementation("io.ktor:ktor-server-test-host:${Versions.ktor}")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-/*
+
     implementation(Ktor.clientCore)
     implementation(Ktor.clientJson)
     implementation(Ktor.clientLogging)
@@ -39,8 +39,8 @@ dependencies {
     implementation(Ktor.clientContentNegotiation)
     implementation(Ktor.clientSerializationJson)
 
- */
- //   implementation(Serialization.core)
+
+    implementation(Serialization.core)
     implementation("io.ktor:ktor-server-status-pages:${Versions.ktor}")
     implementation("io.ktor:ktor-server-call-logging:${Versions.ktor}")
 }
