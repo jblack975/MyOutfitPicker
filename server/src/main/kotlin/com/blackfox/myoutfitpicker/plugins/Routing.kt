@@ -11,19 +11,17 @@ import kotlinx.serialization.json.Json
 
 fun Application.configureRouting() {
     install(Routing) {
-        routing {
-            get("/") {
-                val uri = call.request.uri
-                call.respondText("Request uri: $uri")
-            }
+        get("/") {
+            val uri = call.request.uri
+            call.respondText("Request uri: $uri")
+        }
 
-            get("/hello") {
-                call.respondText("Hello")
-            }
-            get("/weather") {
-                call.respondText("current weather")
-                    //currentWeather()
-            }
+        get("/hello") {
+            call.respondText("Hello")
+        }
+        get("/weather") {
+            call.respondText("current weather")
+            //currentWeather()
         }
     }
 }
