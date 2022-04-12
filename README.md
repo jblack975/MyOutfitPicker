@@ -5,3 +5,9 @@ anonymously give data to help train the model.
 
 This is also an example of how to use some of the modern libraries in a KMP application and will be
 the subject of a YouTube video shortly.
+
+I have only started the server subproject within Android Studio and tested it with curl.
+
+There is an issue at times when building where it may complain that it can't find some library but if you do a
+Build -> Rebuild Project
+It seems to go away.
