@@ -7,13 +7,16 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.native.cocoapods")
     id("com.codingfeline.buildkonfig")
-    id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
+//    id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
 }
 
 version = "1.0"
 
 kotlin {
     android()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     jvm {
         compilations.all {
             kotlinOptions {
@@ -22,14 +25,11 @@ kotlin {
             }
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     cocoapods {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
-        ios.deploymentTarget = "14.1"
+        ios.deploymentTarget = "15.0"
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
@@ -116,18 +116,10 @@ android {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xjvm-default=all"
         )
-    }
-}
-
-multiplatformSwiftPackage {
-    packageName("MyOutfitPickerKit")
-    swiftToolsVersion("5.3")
-    targetPlatforms {
-        iOS { v("15") }
     }
 }
 

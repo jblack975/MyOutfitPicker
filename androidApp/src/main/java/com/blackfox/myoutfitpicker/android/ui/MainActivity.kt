@@ -155,7 +155,11 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold(
-        topBar = { TopAppBar(title = {Text("Outfit Selector")})  },
+        topBar = { TopAppBar(title = {Text("Outfit Selector")},backgroundColor = MaterialTheme.colors.primary)  },
+        floatingActionButtonPosition = FabPosition.End,
+        floatingActionButton = { FloatingActionButton(onClick = {}){
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Outfit")
+        } },
         content = { NavigationHost(navController = navController) },
         bottomBar = { BottomNavigationBar(navController = navController)}
     )

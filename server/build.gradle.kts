@@ -43,7 +43,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:${Versions.ktor}")
     implementation("io.ktor:ktor-server-call-logging:${Versions.ktor}")
 
-    implementation("stdlib-jdk8:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
 }
 
 kotlin {

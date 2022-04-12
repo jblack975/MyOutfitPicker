@@ -27,7 +27,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/climate/month?q=${java.net.URLEncoder.encode(city, "utf-8")}"
+            "$baseUrl/climate/month?q=${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->
@@ -54,7 +54,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/weather?q=${java.net.URLEncoder.encode(city, "utf-8")}"
+            "$baseUrl/weather?q=${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->
