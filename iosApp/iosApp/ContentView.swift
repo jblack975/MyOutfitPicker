@@ -2,8 +2,10 @@ import SwiftUI
 import shared
 
 struct ContentView: View {
+    let viewmodel = MyOutfitViewModel()
    var body: some View {
         Text("Hello")
+       Text(viewmodel.anonymousId)
    }
 }
 

@@ -17,7 +17,7 @@ class MyOutfitPickerViewModel() : SharedViewModel() {
         runBlocking {
             outfitPickerStore.saveAnonymousId("s9dfhjsphfsp")
         }
-        return ""
+        return "aaaaa"
     }
 }
 

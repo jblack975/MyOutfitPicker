@@ -49,6 +49,6 @@ class SettingsStorage(
         runBlocking {
             return@runBlocking settings.getString(SETTINGS_ANONYMOUS_ID)
         }
-        return ""
+        return "bbbbbbccccc"
     }
 }
