@@ -1,10 +1,14 @@
 package com.blackfox.myoutfitpicker.plugins
 
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.Identity.encode
+import kotlinx.coroutines.runBlocking
 
 fun Application.configureRouting() {
     install(Routing) {
@@ -23,6 +27,9 @@ fun Application.configureRouting() {
         }
         get("/weather/monthly/{city}") {
             val city = call.parameters.get("city")
+            val httpClient = createHttpClient()
+                val request = httpClient.get("https://www.google.com/complete/search?q=${city}")
+                println(request.bodyAsText())
             call.respondText("calling for monthly weather in $city")
         }
     }

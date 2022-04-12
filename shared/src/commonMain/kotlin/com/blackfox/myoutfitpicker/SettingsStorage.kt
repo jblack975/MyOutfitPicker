@@ -4,6 +4,7 @@ import com.russhwolf.settings.coroutines.FlowSettings
 import com.blackfox.myoutfitpicker.viewmodel.settings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -15,6 +16,7 @@ class SettingsStorage(
 
         private const val SETTINGS_CITY_LIST = "recent_cities"
         private const val SETTINGS_DEGREE_TYPE = "use_celsius"
+        private const val SETTINGS_ANONYMOUS_ID = "anon_id"
     }
 
     val recentCities: Flow<Set<String>> =
@@ -38,4 +40,15 @@ class SettingsStorage(
         settings.putString(SETTINGS_CITY_LIST, resultSerialized)
     }
 
+    suspend fun saveAnonymousId(anonId: String) {
+        settings.putString(SETTINGS_ANONYMOUS_ID, anonId)
+    }
+
+    fun getAnonymousId(): String {
+        // TODO: Change this to something better
+        runBlocking {
+            return@runBlocking settings.getString(SETTINGS_ANONYMOUS_ID)
+        }
+        return ""
+    }
 }

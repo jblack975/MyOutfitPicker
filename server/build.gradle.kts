@@ -31,7 +31,7 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-test-host:${Versions.ktor}")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-/*
+
     implementation(Ktor.clientCore)
     implementation(Ktor.clientJson)
     implementation(Ktor.clientLogging)
@@ -39,9 +39,11 @@ dependencies {
     implementation(Ktor.clientContentNegotiation)
     implementation(Ktor.clientSerializationJson)
     implementation(Serialization.core)
- */
+
     implementation("io.ktor:ktor-server-status-pages:${Versions.ktor}")
     implementation("io.ktor:ktor-server-call-logging:${Versions.ktor}")
+
+    implementation("stdlib-jdk8:1.6.10")
 }
 
 kotlin {

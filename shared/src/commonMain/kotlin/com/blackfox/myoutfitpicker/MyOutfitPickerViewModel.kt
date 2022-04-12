@@ -3,6 +3,7 @@ package com.blackfox.myoutfitpicker
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -10,6 +11,14 @@ import org.koin.core.component.inject
 class MyOutfitPickerViewModel() : SharedViewModel() {
     private val outfitPickerStore = OutfitPickerStore()
     var activeUser = outfitPickerStore.fetchActiveUser
+    var anonynmousId = outfitPickerStore.fetchAnonymousId
+    fun changeAnonymousId() : String {
+        // TODO: Change this to something better
+        runBlocking {
+            outfitPickerStore.saveAnonymousId("s9dfhjsphfsp")
+        }
+        return ""
+    }
 }
 
 @Serializable

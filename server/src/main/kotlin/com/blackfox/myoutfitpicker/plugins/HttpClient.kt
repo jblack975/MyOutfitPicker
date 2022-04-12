@@ -1,5 +1,5 @@
 package com.blackfox.myoutfitpicker.plugins
-/*
+
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
@@ -13,4 +13,3 @@ fun createHttpClient() = HttpClient {
         })
     }
 }
-*/

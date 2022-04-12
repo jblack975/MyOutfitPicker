@@ -2,18 +2,16 @@ package com.blackfox.myoutfitpicker.android.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Preview
 @Composable
 fun HomeScreen() {
-    Scaffold(topBar = { TopAppBar(title = { Text("Home") }) }) {
-        Column {
-            Text(text = "home view", style = MaterialTheme.typography.h6)
-        }
+    Column {
+        Text(text = "home view", style = MaterialTheme.typography.h6)
     }
 }
+

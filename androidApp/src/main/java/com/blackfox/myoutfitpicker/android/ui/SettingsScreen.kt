@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 fun SettingsScreen() {
     Scaffold(topBar = { TopAppBar(title = { Text("Settings") }) }) {
         Column {
-            Text(text = "home view", style = MaterialTheme.typography.h6)
+            Text(text = "settings view", style = MaterialTheme.typography.h6)
         }
     }
 }

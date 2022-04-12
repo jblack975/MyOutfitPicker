@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 fun OutfitSelectorScreen() {
     Scaffold(topBar = { TopAppBar(title = { Text("Outfit Selector") }) }) {
         Column {
-            Text(text = "home view", style = MaterialTheme.typography.h6)
+            Text(text = "outfit view", style = MaterialTheme.typography.h6)
         }
     }
 }

@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 fun WeatherScreen() {
     Scaffold(topBar = { TopAppBar(title = { Text("Weather") }) }) {
         Column {
-            Text(text = "home view", style = MaterialTheme.typography.h6)
+            Text(text = "weather view", style = MaterialTheme.typography.h6)
         }
     }
 }
