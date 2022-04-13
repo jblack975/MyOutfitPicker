@@ -5,13 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview
 @Composable
 fun HomeScreen() {
+    val viewmodel = MyOutfitPickerViewModel()
     Column {
-        Text(text = "home view", style = MaterialTheme.typography.h6)
+        Text(text = viewmodel.appIntro, style = MaterialTheme.typography.h6)
     }
 }
 
