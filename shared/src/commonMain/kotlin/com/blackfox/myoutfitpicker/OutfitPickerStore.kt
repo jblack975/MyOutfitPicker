@@ -16,3 +16,4 @@ class OutfitPickerStore : KoinComponent {
         settingsStorage.saveAnonymousId(id)
     }
 }
+

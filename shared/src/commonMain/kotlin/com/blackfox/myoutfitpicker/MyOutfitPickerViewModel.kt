@@ -19,6 +19,36 @@ class MyOutfitPickerViewModel() : SharedViewModel() {
         }
         return "aaaaa"
     }
+    var appIntro = """
+Welcome to MyOutfitPicker. 
+In order to better help you decide on which outfit to wear the more access to information you give the better the application can do, but, if you don't give any extra permissions it can still try to help you out. 
+You can also anonymously send information to use a training and that ID is never connected to your own id.
+        """
+}
+
+enum class ClothingTypes(val clothingLabel:String) {
+    BLAZER("blazer"),
+    BLOUSE("blouse"),
+    BODY("body"),
+    DRESS("dress"),
+    HAT("hat"),
+    HOODIE("hoodie"),
+    LONGSLEEVE("longsleeve"),
+    OTHER("other"),
+    OUTERWARE("outerware"),
+    PANTS("pants"),
+    POLO("polo"),
+    SHOES("shoes"),
+    SKIP("skip"),
+    SHIRT("shirt"),
+    SKIRT("skirt"),
+    TOP("top"),
+    TSHIRT("t-shirt"),
+    UNDERSHIRT("undershirt");
+
+    companion object {
+        fun getNumberOfItems() = values().size
+    }
 }
 
 @Serializable
