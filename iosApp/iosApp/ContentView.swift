@@ -56,7 +56,38 @@ struct AnonymousView: View {
 }
 
 struct OutfitView: View {
+    let viewmodel = MyOutfitViewModel()
+    @State private var isPushEnable = false
     var body: some View {
+        VStack {
         Text("Outfit view")
+        let list = ClothingTypes.values()
+        let num = list.size
+        Toggle(isOn: $isPushEnable) {
+            Text(list.get(index: 0)!.clothingLabel)
+        }
+        Toggle(isOn: $isPushEnable) {
+            Text(list.get(index: 1)!.clothingLabel)
+        }
+        Toggle(isOn: $isPushEnable) {
+            Text(list.get(index: 2)!.clothingLabel)
+        }
+        }
     }
 }
+
+#if DEBUG
+struct AnonymousView_Previews: PreviewProvider {
+    static var previews: some View {
+        AnonymousView()
+    }
+}
+#endif
+
+#if DEBUG
+struct OutfitView_Previews: PreviewProvider {
+    static var previews: some View {
+        OutfitView()
+    }
+}
+#endif

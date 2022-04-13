@@ -2,9 +2,9 @@ package com.blackfox.myoutfitpicker
 
 import com.russhwolf.settings.coroutines.FlowSettings
 import com.blackfox.myoutfitpicker.viewmodel.settings
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -45,10 +45,17 @@ class SettingsStorage(
     }
 
     fun getAnonymousId(): String {
-        // TODO: Change this to something better
-        runBlocking {
-            return@runBlocking settings.getString(SETTINGS_ANONYMOUS_ID)
+        return runBlocking {
+            val job: Deferred<String> = async {
+                settings.getString(SETTINGS_ANONYMOUS_ID)
+            }
+            job.start()
+            var s = job.await()
+            if(s.isBlank()) {
+                s = "ffffffjjjjj"
+                saveAnonymousId(s)
+            }
+            return@runBlocking s
         }
-        return "bbbbbbccccc"
     }
 }
