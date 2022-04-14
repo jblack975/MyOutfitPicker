@@ -46,7 +46,7 @@ class SettingsStorage(
 
     fun getAnonymousId(): String {
         return runBlocking {
-            val job: Deferred<String> = async {
+            val job: Deferred<String> = async(Dispatchers.Default) {
                 settings.getString(SETTINGS_ANONYMOUS_ID)
             }
             job.start()

@@ -24,6 +24,7 @@ Welcome to MyOutfitPicker.
 In order to better help you decide on which outfit to wear the more access to information you give the better the application can do, but, if you don't give any extra permissions it can still try to help you out. 
 You can also anonymously send information to use a training and that ID is never connected to your own id.
         """
+    val clothingTypeList = ClothingTypes.values().map{it.clothingLabel}
 }
 
 enum class ClothingTypes(val clothingLabel:String) {
