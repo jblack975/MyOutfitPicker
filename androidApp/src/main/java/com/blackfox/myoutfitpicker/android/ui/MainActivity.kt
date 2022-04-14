@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                 .setSubtitle("Log in using your biometric credential")
                 // Can't call setNegativeButtonText() and
                 // setAllowedAuthenticators(... or DEVICE_CREDENTIAL) at the same time.
-                // .setNegativeButtonText("Use account password")
+                .setNegativeButtonText("Use account password")
                 .setAllowedAuthenticators(BIOMETRIC_STRONG)
                 .build()
             val biometricManager = BiometricManager.from(this)

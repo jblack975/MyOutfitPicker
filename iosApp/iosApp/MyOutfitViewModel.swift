@@ -24,6 +24,9 @@ class MyOutfitViewModel : ObservableObject {
         }
         get {
             return _wasAuthenticated
+        }
+    }
+    
     var clothingTypeList : [String] {
         get {
             viewModel.clothingTypeList
