@@ -31,6 +31,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>NSFaceIDUsageDescription</key>
+	<string>In order to unlock the app, since it may have access to your calendar.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -63,6 +63,7 @@ dependencies {
 
     implementation("androidx.glance:glance-appwidget:1.0.0-alpha03")
 
+    implementation("androidx.biometric:biometric:1.2.0-alpha04")
     // kermit
     implementation(Deps.kermit)
 

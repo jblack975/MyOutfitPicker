@@ -1,11 +1,18 @@
 package com.blackfox.myoutfitpicker.android.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import com.blackfox.myoutfitpicker.Greeting
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +47,31 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for my app")
+                .setSubtitle("Log in using your biometric credential")
+                // Can't call setNegativeButtonText() and
+                // setAllowedAuthenticators(... or DEVICE_CREDENTIAL) at the same time.
+                // .setNegativeButtonText("Use account password")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG)
+                .build()
+            val biometricManager = BiometricManager.from(this)
+            when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
+                BiometricManager.BIOMETRIC_SUCCESS ->
+                    Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
+                BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
+                    Log.e("MY_APP_TAG", "No biometric features available on this device.")
+                BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+                    Log.e("MY_APP_TAG", "Biometric features are currently unavailable.")
+                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
+                    // Prompts the user to create credentials that your app accepts.
+                    val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                        putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                    }
+                    startActivityForResult(enrollIntent, 7654)
+                }
+            }
             MainScreen()
         }
     }
