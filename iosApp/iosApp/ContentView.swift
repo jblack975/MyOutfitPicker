@@ -71,8 +71,9 @@ struct ContentView_Previews: PreviewProvider {
 #endif
 
 struct HomeView: View {
+    let viewmodel = MyOutfitViewModel()
     var body: some View {
-        Text("Home view")
+        Text(viewmodel.appIntro)
     }
 }
 
@@ -93,7 +94,37 @@ struct AnonymousView: View {
 }
 
 struct OutfitView: View {
+    let viewmodel = MyOutfitViewModel()
+    @State private var isPushEnable : [Bool] = [Bool](repeating: false,count: 20)
     var body: some View {
-        Text("Outfit view")
+        VStack {
+            Text("Outfit view")
+            let list2:[String] = viewmodel.clothingTypeList
+            List {
+                ForEach(list2, id:\.self) { item in
+                    if let index = list2.firstIndex(where: { $0 == item }) {
+                        Toggle(isOn: $isPushEnable[index]) {
+                            Text(item)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
+#if DEBUG
+struct AnonymousView_Previews: PreviewProvider {
+    static var previews: some View {
+        AnonymousView()
+    }
+}
+#endif
+
+#if DEBUG
+struct OutfitView_Previews: PreviewProvider {
+    static var previews: some View {
+        OutfitView()
+    }
+}
+#endif

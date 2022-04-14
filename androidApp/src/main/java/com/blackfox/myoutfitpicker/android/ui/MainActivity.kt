@@ -13,6 +13,8 @@ import androidx.activity.compose.setContent
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +24,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -91,7 +94,7 @@ object NavBarItems {
             route = "home"
         ),
         BarItem(
-            title = "Anonymous",
+            title = "Anon",
             image = Icons.Filled.Face,
             route = "anonymous"
         ),
@@ -180,7 +183,6 @@ fun BottomNavigationBar(navController: NavHostController) {
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview
 @Composable
 fun MainScreen() {
@@ -192,7 +194,10 @@ fun MainScreen() {
         floatingActionButton = { FloatingActionButton(onClick = {}){
             Icon(imageVector = Icons.Default.Add, contentDescription = "Outfit")
         } },
-        content = { NavigationHost(navController = navController) },
         bottomBar = { BottomNavigationBar(navController = navController)}
-    )
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding),  propagateMinConstraints=true) {
+            NavigationHost(navController = navController)
+        }
+    }
 }
