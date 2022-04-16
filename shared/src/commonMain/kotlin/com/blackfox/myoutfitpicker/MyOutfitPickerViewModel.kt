@@ -25,6 +25,7 @@ In order to better help you decide on which outfit to wear the more access to in
 You can also anonymously send information to use a training and that ID is never connected to your own id.
         """
     val clothingTypeList = ClothingTypes.values().map{it.clothingLabel}
+    var biomentricsPassed:Boolean? = null
 }
 
 enum class ClothingTypes(val clothingLabel:String) {

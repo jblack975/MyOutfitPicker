@@ -11,7 +11,7 @@ actual open class SharedViewModel actual constructor() : ViewModel() {
     protected actual val weatherRepository: WeatherRepository by KoinJavaComponent.inject(
         WeatherRepository::class.java
     )
-    protected actual val sharedScope: CoroutineScope = viewModelScope
+    actual val sharedScope: CoroutineScope = viewModelScope
     actual var city:String = ""
 
     public actual override fun onCleared() {

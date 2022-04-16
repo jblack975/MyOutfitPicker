@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 import com.blackfox.myoutfitpicker.BuildKonfig
 
 class WeatherApi(private val client: HttpClient,
-                 private val baseUrl: String = "https://community-open-weather-map.p.rapidapi.com") {
+                 private val baseUrl: String = BuildKonfig.weather_client_host_name) {
     private val apiKey = BuildKonfig.api_key
     private val json = Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
 
@@ -27,7 +27,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/climate/month?q=${city.replace(" ", "%20")}"
+            "$baseUrl/weather/monthly/${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->
@@ -54,7 +54,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/weather?q=${city.replace(" ", "%20")}"
+            "$baseUrl/weather/current/${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->

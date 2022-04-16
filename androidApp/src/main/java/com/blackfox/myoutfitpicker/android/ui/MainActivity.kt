@@ -8,10 +8,12 @@ import android.provider.Settings
 import android.util.Log
 import com.blackfox.myoutfitpicker.Greeting
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -23,43 +25,37 @@ import kotlinx.coroutines.launch
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
+import java.lang.Thread.sleep
 
 fun greet(): String {
     return Greeting().greeting()
 }
 
-class MainActivity : ComponentActivity() {
-
-    lateinit var manager: GlanceAppWidgetManager
-
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        manager = GlanceAppWidgetManager(this)
-
-        lifecycleScope.launch {
-        }
-
+        val viewmodel = MyOutfitPickerViewModel()
         setContent {
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Biometric login for my app")
                 .setSubtitle("Log in using your biometric credential")
-                // Can't call setNegativeButtonText() and
-                // setAllowedAuthenticators(... or DEVICE_CREDENTIAL) at the same time.
-                .setNegativeButtonText("Use account password")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG)
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
             val biometricManager = BiometricManager.from(this)
-            when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
+            when (biometricManager.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)) {
                 BiometricManager.BIOMETRIC_SUCCESS ->
                     Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
                 BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
@@ -69,14 +65,59 @@ class MainActivity : ComponentActivity() {
                 BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                     // Prompts the user to create credentials that your app accepts.
                     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
-                        putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                        putExtra(
+                            Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                        )
                     }
                     startActivityForResult(enrollIntent, 7654)
                 }
             }
-            MainScreen()
+            showBiometricPrompt(viewModel = viewmodel)
+
+//            MainScreen()
         }
+    }
+    private fun showBiometricPrompt(viewModel: MyOutfitPickerViewModel)  {
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("biometric title")
+            .setSubtitle("some description")
+            .setConfirmationRequired(true)
+            .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+            .build()
+
+        val biometricPrompt = BiometricPrompt(
+            this@MainActivity,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Error will rogers",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    viewModel.biomentricsPassed = false
+                }
+
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+                    viewModel.biomentricsPassed = true
+                }
+
+                override fun onAuthenticationFailed() {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "auth failed",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+
+        biometricPrompt.authenticate(promptInfo)
     }
 }
 
@@ -199,5 +240,37 @@ fun MainScreen() {
         Box(modifier = Modifier.padding(innerPadding),  propagateMinConstraints=true) {
             NavigationHost(navController = navController)
         }
+    }
+}
+
+private const val MinPinLength = 4
+private const val MaxPinLength = 16
+private const val CorrectPin = "1234"
+
+enum class LoadState {
+    SHOW_PIN,
+    SHOW_CONTENT,
+}
+
+data class PinState(
+    val pin: String,
+    val pinButtonEnabled: Boolean,
+    val pinError: Boolean,
+)
+
+data class MainState(
+    val loadState: LoadState,
+    val pinState: PinState,
+    override val value: LoadState = LoadState.SHOW_PIN,
+) : State<LoadState> {
+    companion object {
+        val initial = MainState(
+            loadState = LoadState.SHOW_PIN,
+            pinState = PinState(
+                pin = "",
+                pinButtonEnabled = false,
+                pinError = false,
+            ),
+        )
     }
 }

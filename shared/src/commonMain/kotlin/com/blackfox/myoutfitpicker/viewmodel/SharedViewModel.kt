@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Suppress("EmptyDefaultConstructor")
 expect open class SharedViewModel() {
-    protected val sharedScope: CoroutineScope
+    val sharedScope: CoroutineScope
     protected val weatherRepository: WeatherRepository
 
     var city: String

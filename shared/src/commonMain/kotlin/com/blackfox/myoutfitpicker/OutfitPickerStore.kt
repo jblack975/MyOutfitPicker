@@ -1,13 +1,16 @@
 package com.blackfox.myoutfitpicker
 
 import com.blackfox.myoutfitpicker.remote.WeatherApi
+import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 import org.koin.core.component.inject
 
 class OutfitPickerStore : KoinComponent {
     private val weatherApi: WeatherApi by inject()
-    private val settingsStorage: SettingsStorage = SettingsStorage()
+    private val viewModel: SharedViewModel by inject()
+    private val settingsStorage: SettingsStorage = SettingsStorage(viewModel = get())
 
     private val _disabledCategories: Flow<Set<String>> = settingsStorage.recentCities
     val fetchActiveUser = false

@@ -12,7 +12,7 @@ import kotlin.native.internal.GC
 actual open class SharedViewModel actual constructor() {
     protected actual val weatherRepository: WeatherRepository = WeatherRepository()
 
-    protected actual val sharedScope: CoroutineScope = createViewModelScope()
+    actual val sharedScope: CoroutineScope = createViewModelScope()
 
     actual var city:String = ""
 

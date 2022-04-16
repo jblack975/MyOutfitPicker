@@ -13,5 +13,8 @@ fun Application.module() {
     configureStatusPages()
     configureCallLogging()
     configureSerialization()
+    try {
+        val s = println(Platform().platform)
+    } catch(e:Throwable) { println("Wrong shared subproject.")}
 }
 

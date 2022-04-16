@@ -3,7 +3,7 @@ import shared
 import LocalAuthentication
 
 struct ContentView: View {
-    let viewmodel = MyOutfitViewModel()
+    var viewmodel : MyOutfitViewModel
     @State private var isUnlocked = false
     func authenticate() {
         let context = LAContext()
@@ -37,19 +37,19 @@ struct ContentView: View {
         VStack {
             if isUnlocked {
                 TabView {
-                    HomeView()
+                    HomeView(viewmodel: viewmodel)
                         .tabItem {
                             Label("Home", systemImage: "list.dash")
                         }
-                    OutfitView()
+                    OutfitView(viewmodel: viewmodel)
                         .tabItem {
                             Label("Outfit", systemImage: "square.and.pencil")
                         }
-                    AnonymousView()
+                    AnonymousView(viewmodel: viewmodel)
                         .tabItem {
                             Label("Anonymous", systemImage: "list.dash")
                         }
-                    SettingsView()
+                    SettingsView(viewmodel: viewmodel)
                         .tabItem {
                             Label("Settings", systemImage: "list.dash")
                         }
@@ -65,26 +65,28 @@ struct ContentView: View {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        var viewmodel = MyOutfitViewModel()
+        ContentView(viewmodel: viewmodel)
     }
 }
 #endif
 
 struct HomeView: View {
-    let viewmodel = MyOutfitViewModel()
+    let viewmodel : MyOutfitViewModel
     var body: some View {
         Text(viewmodel.appIntro)
     }
 }
 
 struct SettingsView: View {
+    var viewmodel : MyOutfitViewModel
     var body: some View {
         Text("Settings view")
     }
 }
 
 struct AnonymousView: View {
-    let viewmodel = MyOutfitViewModel()
+    var viewmodel : MyOutfitViewModel
     var body: some View {
         VStack {
             Text("Anonymous view")
@@ -94,7 +96,7 @@ struct AnonymousView: View {
 }
 
 struct OutfitView: View {
-    let viewmodel = MyOutfitViewModel()
+    var viewmodel : MyOutfitViewModel
     @State private var isPushEnable : [Bool] = [Bool](repeating: false,count: 20)
     var body: some View {
         VStack {
@@ -116,7 +118,8 @@ struct OutfitView: View {
 #if DEBUG
 struct AnonymousView_Previews: PreviewProvider {
     static var previews: some View {
-        AnonymousView()
+        var viewmodel = MyOutfitViewModel()
+        AnonymousView(viewmodel: viewmodel)
     }
 }
 #endif
@@ -124,7 +127,8 @@ struct AnonymousView_Previews: PreviewProvider {
 #if DEBUG
 struct OutfitView_Previews: PreviewProvider {
     static var previews: some View {
-        OutfitView()
+        var viewmodel = MyOutfitViewModel()
+        OutfitView(viewmodel: viewmodel)
     }
 }
 #endif

@@ -32,6 +32,11 @@ fun Application.configureRouting() {
                 println(request.bodyAsText())
             call.respondText("calling for monthly weather in $city")
         }
+        post("/outfit_data/") {
+            val data = call.receive<String>()
+            println(data)
+            call.respondText("success", null, HttpStatusCode.OK)
+        }
     }
 }
 
