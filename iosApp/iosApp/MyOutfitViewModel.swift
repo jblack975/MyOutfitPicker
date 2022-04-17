@@ -10,6 +10,7 @@ import Foundation
 import shared
 
 class MyOutfitViewModel : ObservableObject {
+    private var _wasAuthenticated = false
     private let viewModel = MyOutfitPickerViewModel()
     private let store = OutfitPickerStore()
     var anonymousId: String {
@@ -17,6 +18,15 @@ class MyOutfitViewModel : ObservableObject {
             viewModel.anonynmousId
         }
     }
+    var wasAuthenticated:Bool {
+        set(value) {
+            _wasAuthenticated = value
+        }
+        get {
+            return _wasAuthenticated
+        }
+    }
+    
     var clothingTypeList : [String] {
         get {
             viewModel.clothingTypeList

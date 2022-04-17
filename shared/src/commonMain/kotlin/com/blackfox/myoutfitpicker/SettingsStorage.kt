@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker
 
+import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import com.russhwolf.settings.coroutines.FlowSettings
 import com.blackfox.myoutfitpicker.viewmodel.settings
 import kotlinx.coroutines.*
@@ -10,6 +11,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class SettingsStorage(
+    private val viewModel: SharedViewModel,
     private val settings: FlowSettings = settings()
 ) {
     companion object {

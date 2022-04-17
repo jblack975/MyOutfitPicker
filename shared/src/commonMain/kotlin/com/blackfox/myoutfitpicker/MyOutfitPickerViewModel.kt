@@ -3,6 +3,8 @@ package com.blackfox.myoutfitpicker
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
@@ -10,8 +12,11 @@ import org.koin.core.component.inject
 
 class MyOutfitPickerViewModel() : SharedViewModel() {
     private val outfitPickerStore = OutfitPickerStore()
+    private var situation:Situations? = null
     var activeUser = outfitPickerStore.fetchActiveUser
     var anonynmousId = outfitPickerStore.fetchAnonymousId
+    var readyToSubmit = MutableSharedFlow<Boolean>(1)
+    var currentWeatherFlow = MutableSharedFlow<MainTemperature>(1)
     fun changeAnonymousId() : String {
         // TODO: Change this to something better
         runBlocking {
@@ -25,32 +30,37 @@ In order to better help you decide on which outfit to wear the more access to in
 You can also anonymously send information to use a training and that ID is never connected to your own id.
         """
     val clothingTypeList = ClothingTypes.values().map{it.clothingLabel}
-}
-
-enum class ClothingTypes(val clothingLabel:String) {
-    BLAZER("blazer"),
-    BLOUSE("blouse"),
-    BODY("body"),
-    DRESS("dress"),
-    HAT("hat"),
-    HOODIE("hoodie"),
-    LONGSLEEVE("longsleeve"),
-    OTHER("other"),
-    OUTERWARE("outerware"),
-    PANTS("pants"),
-    POLO("polo"),
-    SHOES("shoes"),
-    SKIP("skip"),
-    SHIRT("shirt"),
-    SKIRT("skirt"),
-    TOP("top"),
-    TSHIRT("t-shirt"),
-    UNDERSHIRT("undershirt");
-
-    companion object {
-        fun getNumberOfItems() = values().size
+    var biomentricsPassed:Boolean? = null
+    val situationTypeList = Situations.values().map{it.situationalName}
+    var clothingWeatherData:ClothingWeatherModel = ClothingWeatherModel(emptyList(), null, null, id=anonynmousId)
+    fun addClothingToClothingWeather(clothing:ClothingTypes) {
+        val list = clothingWeatherData.clothing?.toMutableList()
+        list?.add(clothing)
+        clothingWeatherData.clothing = list?.toList()
+        readyToSubmit.tryEmit(clothingWeatherData.clothing?.isNotEmpty() == true && clothingWeatherData.situation != null)
+    }
+    var situationChoice: Situations?
+        get() {
+            return situation
+        }
+        set(value) {
+            situation = value
+            clothingWeatherData.apply {
+                situation = value
+                temperature = com.blackfox.myoutfitpicker.MainTemperature(70.0, 60.0, 60.0, 40.0, 70.0, 50.0, 70, 70)
+            }
+            readyToSubmit.tryEmit(clothingWeatherData.clothing?.isNotEmpty() == true && clothingWeatherData.situation != null)
+        }
+    suspend fun submitAnonymousData() {
+        if(readyToSubmit.last()) {
+            sendAnonymousData(clothingWeatherData)
+            clothingWeatherData = ClothingWeatherModel(emptyList(), null, null, id=anonynmousId)
+        }
     }
 }
+
+@Serializable
+data class ClothingWeatherModel(var clothing:List<ClothingTypes>? = emptyList(), var temperature:MainTemperature? = null, var situation:Situations? = null, var id:String = "")
 
 @Serializable
 data class ErrorModel(val cod:Int, val message:String)

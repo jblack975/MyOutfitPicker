@@ -6,7 +6,6 @@ plugins {
     id("application")
     kotlin("plugin.serialization")
     id("kotlinx-serialization")
-//    id("com.google.cloud.tools.appengine").version("2.4.2")
 }
 
 group = "com.blackfox.myoutfitpicker"

@@ -5,7 +5,7 @@ struct iOSApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+            ContentView(viewmodel: MyOutfitViewModel())
 		}
 	}
 }

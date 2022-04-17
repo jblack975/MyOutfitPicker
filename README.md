@@ -11,3 +11,12 @@ I have only started the server subproject within Android Studio and tested it wi
 There is an issue at times when building where it may complain that it can't find some library but if you do a
 Build -> Rebuild Project
 It seems to go away.
+
+Minimal **Kotlin Multiplatform** project with SwiftUI, Jetpack Compose, along with Ktor backend. Currently running on
+* Android (Jetpack Compose)
+* iOS (SwiftUI)
+* JVM (small Ktor back end service + `Main.kt` in `shared` module)
+
+These are in the code but not actually being used yet.
+* Android App Widget (Compose based Glance API - contributed by https://github.com/yschimke)
+* iOS App Widget (SwiftUI)

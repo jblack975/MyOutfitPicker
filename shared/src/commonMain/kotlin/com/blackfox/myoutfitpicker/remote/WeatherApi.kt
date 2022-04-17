@@ -1,8 +1,7 @@
 package com.blackfox.myoutfitpicker.remote
 
-import com.blackfox.myoutfitpicker.CurrentForecast
-import com.blackfox.myoutfitpicker.ErrorModel
-import com.blackfox.myoutfitpicker.MonthlyForecast
+import com.blackfox.myoutfitpicker.*
+import com.blackfox.myoutfitpicker.BuildKonfig
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
@@ -10,10 +9,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import com.blackfox.myoutfitpicker.BuildKonfig
 
 class WeatherApi(private val client: HttpClient,
-                 private val baseUrl: String = "https://community-open-weather-map.p.rapidapi.com") {
+                 private val baseUrl: String = BuildKonfig.weather_client_host_name) {
     private val apiKey = BuildKonfig.api_key
     private val json = Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
 
@@ -27,7 +25,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/climate/month?q=${city.replace(" ", "%20")}"
+            "$baseUrl/weather/monthly/${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->
@@ -44,6 +42,24 @@ class WeatherApi(private val client: HttpClient,
             }
         }
     }
+    suspend fun sendUserData(data:ClothingWeatherModel) : Boolean {
+        client.plugin(HttpSend).intercept { request ->
+            val originalCall = execute(request)
+            if (originalCall.response.status.value !in 100..399) {
+                execute(request)
+            } else {
+                originalCall
+            }
+        }
+        client.post(
+            "$baseUrl/outfit_data"
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(data)
+        }.also { response ->
+            return response.status == HttpStatusCode.OK || response.status == HttpStatusCode.Created
+        }
+    }
     suspend fun retrieveCurrentWeatherByCity(city:String) : CurrentForecast? {
         client.plugin(HttpSend).intercept { request ->
             val originalCall = execute(request)
@@ -54,7 +70,7 @@ class WeatherApi(private val client: HttpClient,
             }
         }
         client.get(
-            "$baseUrl/weather?q=${city.replace(" ", "%20")}"
+            "$baseUrl/weather/current/${city.replace(" ", "%20")}"
         ) {
             contentType(ContentType.Application.Json)
         }.also { response ->

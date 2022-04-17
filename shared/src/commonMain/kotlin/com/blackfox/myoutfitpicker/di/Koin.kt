@@ -4,6 +4,7 @@ import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import com.blackfox.myoutfitpicker.OutfitPickerStore
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
+import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 //import io.ktor.client.plugins.contentnegotiation.*
@@ -27,6 +28,7 @@ fun commonModule() = module {
     single { createHttpClient() }
     single { WeatherApi(get()) }
     single { WeatherRepository() }
+    single { SharedViewModel()}
     single { OutfitPickerStore() }
     single { MyOutfitPickerViewModel() }
 }

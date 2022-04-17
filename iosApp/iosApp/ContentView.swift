@@ -1,53 +1,92 @@
 import SwiftUI
 import shared
+import LocalAuthentication
 
 struct ContentView: View {
-    let viewmodel = MyOutfitViewModel()
-    var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "list.dash")
+    var viewmodel : MyOutfitViewModel
+    @State private var isUnlocked = false
+    func authenticate() {
+        let context = LAContext()
+        var error: NSError?
+        
+        // check whether biometric authentication is possible
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            // it's possible, so go ahead and use it
+            let reason = "We need to unlock your data."
+            
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
+                // authentication has now completed
+                if success {
+                    isUnlocked = true
+                    viewmodel.wasAuthenticated = true
+                } else {
+                    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, authenticationError in
+                        // authentication has now completed
+                        if success {
+                            isUnlocked = true
+                            viewmodel.wasAuthenticated = true
+                        } else {
+                        }
+                    }
                 }
-            OutfitView()
-                .tabItem {
-                    Label("Outfit", systemImage: "square.and.pencil")
-                }
-            AnonymousView()
-                .tabItem {
-                    Label("Anonymous", systemImage: "list.dash")
-                }
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "list.dash")
-                }
+            }
+        } else {
         }
+    }
+    var body: some View {
+        VStack {
+            if isUnlocked {
+                TabView {
+                    HomeView(viewmodel: viewmodel)
+                        .tabItem {
+                            Label("Home", systemImage: "list.dash")
+                        }
+                    OutfitView(viewmodel: viewmodel)
+                        .tabItem {
+                            Label("Outfit", systemImage: "square.and.pencil")
+                        }
+                    AnonymousView(viewmodel: viewmodel)
+                        .tabItem {
+                            Label("Anonymous", systemImage: "list.dash")
+                        }
+                    SettingsView(viewmodel: viewmodel)
+                        .tabItem {
+                            Label("Settings", systemImage: "list.dash")
+                        }
+                }
+            } else {
+                Text("Locked")
+            }
+        }
+        .onAppear(perform: authenticate)
     }
 }
 
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        var viewmodel = MyOutfitViewModel()
+        ContentView(viewmodel: viewmodel)
     }
 }
 #endif
 
 struct HomeView: View {
-    let viewmodel = MyOutfitViewModel()
+    let viewmodel : MyOutfitViewModel
     var body: some View {
         Text(viewmodel.appIntro)
     }
 }
 
 struct SettingsView: View {
+    var viewmodel : MyOutfitViewModel
     var body: some View {
         Text("Settings view")
     }
 }
 
 struct AnonymousView: View {
-    let viewmodel = MyOutfitViewModel()
+    var viewmodel : MyOutfitViewModel
     var body: some View {
         VStack {
             Text("Anonymous view")
@@ -57,7 +96,7 @@ struct AnonymousView: View {
 }
 
 struct OutfitView: View {
-    let viewmodel = MyOutfitViewModel()
+    var viewmodel : MyOutfitViewModel
     @State private var isPushEnable : [Bool] = [Bool](repeating: false,count: 20)
     var body: some View {
         VStack {
@@ -79,7 +118,8 @@ struct OutfitView: View {
 #if DEBUG
 struct AnonymousView_Previews: PreviewProvider {
     static var previews: some View {
-        AnonymousView()
+        var viewmodel = MyOutfitViewModel()
+        AnonymousView(viewmodel: viewmodel)
     }
 }
 #endif
@@ -87,7 +127,8 @@ struct AnonymousView_Previews: PreviewProvider {
 #if DEBUG
 struct OutfitView_Previews: PreviewProvider {
     static var previews: some View {
-        OutfitView()
+        var viewmodel = MyOutfitViewModel()
+        OutfitView(viewmodel: viewmodel)
     }
 }
 #endif
