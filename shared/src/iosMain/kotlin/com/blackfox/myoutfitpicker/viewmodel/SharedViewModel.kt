@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker.viewmodel
 
+import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,10 @@ actual open class SharedViewModel actual constructor() {
         sharedScope.cancel()
 
         dispatch_async(dispatch_get_main_queue()) { GC.collect() }
+    }
+
+    actual suspend fun sendAnonymousData(data: ClothingWeatherModel) {
+        weatherRepository.saveAnonymousData(data)
     }
 }
 

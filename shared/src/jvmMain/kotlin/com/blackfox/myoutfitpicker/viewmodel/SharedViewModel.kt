@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker.viewmodel
 
+import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -14,6 +15,10 @@ actual open class SharedViewModel actual constructor() {
     actual val sharedScope: CoroutineScope = GlobalScope
     actual var city: String = ""
     actual open fun onCleared() {
+    }
+
+    actual suspend fun sendAnonymousData(data: ClothingWeatherModel) {
+        weatherRepository.saveAnonymousData(data)
     }
 
     @Serializable

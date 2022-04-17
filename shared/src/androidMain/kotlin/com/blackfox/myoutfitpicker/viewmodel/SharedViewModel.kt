@@ -2,6 +2,7 @@ package com.blackfox.myoutfitpicker.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import org.koin.java.KoinJavaComponent
@@ -16,5 +17,9 @@ actual open class SharedViewModel actual constructor() : ViewModel() {
 
     public actual override fun onCleared() {
         super.onCleared()
+    }
+
+    actual suspend fun sendAnonymousData(data:ClothingWeatherModel) {
+        weatherRepository.saveAnonymousData(data)
     }
 }

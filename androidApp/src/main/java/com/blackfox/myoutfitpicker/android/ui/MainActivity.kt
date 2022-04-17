@@ -52,10 +52,11 @@ class MainActivity : FragmentActivity() {
             val promptInfo = BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Biometric login for my app")
                 .setSubtitle("Log in using your biometric credential")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                .setNegativeButtonText("Cancel")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG)
                 .build()
             val biometricManager = BiometricManager.from(this)
-            when (biometricManager.canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)) {
+            when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
                 BiometricManager.BIOMETRIC_SUCCESS ->
                     Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
                 BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
@@ -75,15 +76,16 @@ class MainActivity : FragmentActivity() {
             }
             showBiometricPrompt(viewModel = viewmodel)
 
-//            MainScreen()
+            MainScreen()
         }
     }
     private fun showBiometricPrompt(viewModel: MyOutfitPickerViewModel)  {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("biometric title")
             .setSubtitle("some description")
+            .setNegativeButtonText("Cancel")
             .setConfirmationRequired(true)
-            .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+            .setAllowedAuthenticators(BIOMETRIC_WEAK)
             .build()
 
         val biometricPrompt = BiometricPrompt(
