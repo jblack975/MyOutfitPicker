@@ -5,6 +5,7 @@ import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
@@ -51,10 +52,11 @@ You can also anonymously send information to use a training and that ID is never
             }
             readyToSubmit.tryEmit(clothingWeatherData.clothing?.isNotEmpty() == true && clothingWeatherData.situation != null)
         }
-    suspend fun submitAnonymousData() {
-        if(readyToSubmit.last()) {
-            sendAnonymousData(clothingWeatherData)
-            clothingWeatherData = ClothingWeatherModel(emptyList(), null, null, id=anonynmousId)
+    fun submitAnonymousData() {
+        sharedScope.launch {
+                sendAnonymousData(clothingWeatherData)
+                clothingWeatherData =
+                    ClothingWeatherModel(emptyList(), null, null, id = anonynmousId)
         }
     }
 }

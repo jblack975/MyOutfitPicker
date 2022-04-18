@@ -4,10 +4,10 @@ import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.java.KoinJavaComponent
 
-@Suppress("EmptyDefaultConstructor")
 actual open class SharedViewModel actual constructor() {
     protected actual val weatherRepository: WeatherRepository by KoinJavaComponent.inject(
         WeatherRepository::class.java
@@ -17,8 +17,10 @@ actual open class SharedViewModel actual constructor() {
     actual open fun onCleared() {
     }
 
-    actual suspend fun sendAnonymousData(data: ClothingWeatherModel) {
-        weatherRepository.saveAnonymousData(data)
+    actual fun sendAnonymousData(data: ClothingWeatherModel) {
+        sharedScope.launch {
+            weatherRepository.saveAnonymousData(data)
+        }
     }
 
     @Serializable

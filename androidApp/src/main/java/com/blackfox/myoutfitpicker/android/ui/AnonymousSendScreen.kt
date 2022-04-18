@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.blackfox.myoutfitpicker.ClothingTypes
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import com.blackfox.myoutfitpicker.Situations
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
 import org.koin.androidx.compose.inject
 
@@ -37,10 +36,8 @@ fun AnonymousSendScreen() {
                 Text(text = viewmodel.anonynmousId)
                 Button(onClick = {
                     println("button clicked")
-                    runBlocking {
                         viewmodel.submitAnonymousData()
-                    }
-                                 }, enabled=viewmodel.readyToSubmit.collectAsState(initial = false).value) {
+                }, enabled=viewmodel.readyToSubmit.collectAsState(initial = false).value) {
                     Text("Submit Data")
                 }
             }

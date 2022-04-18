@@ -43,21 +43,18 @@ class WeatherApi(private val client: HttpClient,
         }
     }
     suspend fun sendUserData(data:ClothingWeatherModel) : Boolean {
-        client.plugin(HttpSend).intercept { request ->
-            val originalCall = execute(request)
-            if (originalCall.response.status.value !in 100..399) {
-                execute(request)
-            } else {
-                originalCall
+        try {
+            client.post(
+                "$baseUrl/outfit_data"
+            ) {
+                contentType(ContentType.Application.Json)
+                setBody(data)
+            }.also { response ->
+                return response.status == HttpStatusCode.OK || response.status == HttpStatusCode.Created
             }
-        }
-        client.post(
-            "$baseUrl/outfit_data"
-        ) {
-            contentType(ContentType.Application.Json)
-            setBody(data)
-        }.also { response ->
-            return response.status == HttpStatusCode.OK || response.status == HttpStatusCode.Created
+        } catch(e:Throwable) {
+            println("${e.message} calling $baseUrl/outfit_data")
+            return false
         }
     }
     suspend fun retrieveCurrentWeatherByCity(city:String) : CurrentForecast? {
