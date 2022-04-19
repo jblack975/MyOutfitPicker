@@ -27,3 +27,5 @@ gradle.properties
 iosApp/Pods/*
 iosApp/Podfile.locks
 shared/shared.podspec
+iosApp/iosApp.xcworkspace
+iosApp/iosApp.xcworkspace/*
