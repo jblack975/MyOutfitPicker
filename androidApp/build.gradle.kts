@@ -73,7 +73,8 @@ dependencies {
 
     implementation(Ktor.clientAndroid)
     implementation(Ktor.clientCore)
-
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:runner:1.4.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.1.1")

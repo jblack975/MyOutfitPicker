@@ -7,6 +7,7 @@ import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import io.ktor.client.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 //import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
@@ -34,13 +35,13 @@ fun commonModule() = module {
 }
 
 fun createHttpClient() = HttpClient {
-    /*
+
     install(ContentNegotiation) {
         json(Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
         )
     }
 
-     */
+
     install(Logging) {
         logger = Logger.DEFAULT
         level = LogLevel.INFO
