@@ -68,7 +68,7 @@ class MainActivity : FragmentActivity() {
                     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
                         putExtra(
                             Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                            BIOMETRIC_STRONG
                         )
                     }
                     startActivityForResult(enrollIntent, 7654)
@@ -85,7 +85,7 @@ class MainActivity : FragmentActivity() {
             .setSubtitle("some description")
             .setNegativeButtonText("Cancel")
             .setConfirmationRequired(true)
-            .setAllowedAuthenticators(BIOMETRIC_WEAK)
+            .setAllowedAuthenticators(BIOMETRIC_STRONG)
             .build()
 
         val biometricPrompt = BiometricPrompt(

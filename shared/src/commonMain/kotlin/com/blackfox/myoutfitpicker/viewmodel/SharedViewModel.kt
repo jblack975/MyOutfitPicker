@@ -13,5 +13,5 @@ expect open class SharedViewModel() {
 
     open fun onCleared()
 
-    suspend fun sendAnonymousData(data:ClothingWeatherModel)
+    fun sendAnonymousData(data:ClothingWeatherModel)
 }

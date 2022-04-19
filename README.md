@@ -3,10 +3,12 @@ calendar events, the expected weather for where they are and where they will be 
 preferences. It will later use machine learning to help, but initially it will allow them to 
 anonymously give data to help train the model.
 
-This is also an example of how to use some of the modern libraries in a KMP application and will be
-the subject of a YouTube video shortly.
+This is also an example of how to use some of the modern libraries in a KMP application and you can see the video at 
 
 I have only started the server subproject within Android Studio and tested it with curl.
+
+For the Android project to call the server subproject change in gradle.properties this line:
+weather_client_host_name=http://10.0.2.2:8080
 
 There is an issue at times when building where it may complain that it can't find some library but if you do a
 Build -> Rebuild Project

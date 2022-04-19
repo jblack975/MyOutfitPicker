@@ -69,9 +69,11 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(Ktor.clientAndroid)
-                implementation( Deps.lifecycleViewmodel)
                 implementation(Deps.datastore)
                 implementation("androidx.startup:startup-runtime:1.1.1")
+                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+                implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+
             }
         }
         val androidTest by getting
