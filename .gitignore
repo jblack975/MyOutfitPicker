@@ -25,3 +25,7 @@ gradle.properties
 .DS_Store
 .externalNativeBuild
 iosApp/Pods/*
+iosApp/Podfile.locks
+shared/shared.podspec
+iosApp/iosApp.xcworkspace
+iosApp/iosApp.xcworkspace/*
