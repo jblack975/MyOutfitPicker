@@ -1,6 +1,8 @@
 package com.blackfox.myoutfitpicker.viewmodel
 
 import com.blackfox.myoutfitpicker.ClothingWeatherModel
+import com.blackfox.myoutfitpicker.CurrentForecast
+import com.blackfox.myoutfitpicker.MonthlyForecast
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +30,14 @@ actual open class SharedViewModel actual constructor() {
         sharedScope.launch {
             weatherRepository.saveAnonymousData(data)
         }
+    }
+
+    actual suspend fun retrieveMonthlyForecastByCity(city: String): MonthlyForecast? {
+        return weatherRepository.retrieveMonthlyForecastByCity(city)
+    }
+
+    actual suspend fun retrieveCurrentWeatherByCity(city: String): CurrentForecast? {
+        return weatherRepository.retrieveCurrentWeatherByCity(city)
     }
 }
 

@@ -14,20 +14,18 @@ version = "1.0"
 
 kotlin {
     android()
+    jvm()
+    /*
+    jvm {
+        withJava()
+    }
+     */
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    jvm {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-                //useIR = true
-            }
-        }
-    }
 
     cocoapods {
-        summary = "Some description for the Shared Module"
+        summary = "A shared library to call the webservice to get weather information, with common clothing article names and a ML model"
         homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = "15.0"
         podfile = project.file("../iosApp/Podfile")
@@ -98,6 +96,7 @@ kotlin {
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
         }
+
         val jvmMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-apache:${Versions.ktor}")
@@ -119,7 +118,7 @@ android {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-        freeCompilerArgs = listOf("-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check",
+        freeCompilerArgs = listOf("-Xskip-prerelease-check",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xjvm-default=all"
         )
     }
@@ -130,9 +129,9 @@ buildkonfig {
 
     defaultConfigs {
         buildConfigField(
-            type = STRING,
+            type = com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
             name = "api_key",
-            value = findProperty("rapidapikey") as? String ?: throw Exception("catsApiKey is not set")
+            value = findProperty("apikey") as? String ?: throw Exception("catsApiKey is not set")
         )
         buildConfigField(
             type = STRING,

@@ -15,6 +15,13 @@ class OutfitPickerStore : KoinComponent {
     private val _disabledCategories: Flow<Set<String>> = settingsStorage.recentCities
     val fetchActiveUser = false
     val fetchAnonymousId = settingsStorage.getAnonymousId()
+    suspend fun retrieveMonthlyForecastByCity(city: String): MonthlyForecast?  {
+        return viewModel.retrieveMonthlyForecastByCity(city)
+    }
+
+    suspend fun retrieveCurrentWeatherByCity(city: String): CurrentForecast?  {
+        return viewModel.retrieveCurrentWeatherByCity(city)
+    }
     suspend fun saveAnonymousId(id: String) {
         settingsStorage.saveAnonymousId(id)
     }
