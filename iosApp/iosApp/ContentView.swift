@@ -104,7 +104,7 @@ struct AnonymousView: View {
                         }
                         Text("Selected situation is : \(selectedSituation)")
                         Button("Send Data", action: {
-                            outfitViewModel.situationChoiceFromName(choice: selectedSituation)
+                            outfitViewModel.situationChoiceFromName(name: selectedSituation)
                             outfitViewModel.submitAnonymousData()
                             
                         })

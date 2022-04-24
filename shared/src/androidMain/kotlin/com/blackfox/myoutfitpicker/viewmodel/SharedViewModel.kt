@@ -22,7 +22,7 @@ actual open class SharedViewModel actual constructor() : ViewModel() {
         super.onCleared()
     }
 
-    actual fun sendAnonymousData(data:ClothingWeatherModel) {
+    actual fun sendAnonymousData(data: ClothingWeatherModel) {
         sharedScope.launch {
             weatherRepository.saveAnonymousData(data)
         }
