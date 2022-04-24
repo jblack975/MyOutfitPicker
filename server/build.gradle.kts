@@ -42,7 +42,9 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:${Versions.ktor}")
     implementation("io.ktor:ktor-server-call-logging:${Versions.ktor}")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20")
+    testImplementation("io.ktor:ktor-server-test-host:${Versions.ktor}")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.20")
 }
 
 kotlin {
