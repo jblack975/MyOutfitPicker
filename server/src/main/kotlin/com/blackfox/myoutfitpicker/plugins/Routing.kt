@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker.plugins
 
+import com.blackfox.myoutfitpicker.API_KEY
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -8,9 +9,11 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.Identity.encode
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun Application.configureRouting() {
+    val apikey = API_KEY
     install(Routing) {
         get("/weather") {
                 call.respondText("current weather")
@@ -27,10 +30,17 @@ fun Application.configureRouting() {
         }
         get("/weather/monthly/{city}") {
             val city = call.parameters.get("city")
-            val httpClient = createHttpClient()
-                val request = httpClient.get("https://www.google.com/complete/search?q=${city}")
-                println(request.bodyAsText())
-            call.respondText("calling for monthly weather in $city")
+            val httpClient = createHttpClient().let {
+                headersOf("X-RapidAPI-Host", "community-open-weather-map.p.rapidapi.com"),
+                headersOf("X-RapidAPI-Key", API_KEY)
+            }
+            val request =
+                httpClient.get("'https://community-open-weather-map.p.rapidapi.com/climate/month?q=${city}")
+            launch {
+                val s = request.bodyAsText()
+                println(s.toString())
+                call.respondText(s)
+            }
         }
         post("/outfit_data") {
             val data = call.receive<String>()

@@ -65,7 +65,7 @@ struct ContentView: View {
 #if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        var viewmodel = MyOutfitViewModel()
+        let viewmodel = MyOutfitViewModel()
         ContentView(viewmodel: viewmodel)
     }
 }
@@ -86,31 +86,60 @@ struct SettingsView: View {
 }
 
 struct AnonymousView: View {
-    var viewmodel : MyOutfitViewModel
+    @ObservedObject var viewmodel : MyOutfitViewModel
+    @State var selectedSituation = "gym"
+    var outfitViewModel = MyOutfitPickerViewModel()
+    @State private var isPushEnable : [Bool] = [Bool](repeating: false,count: 20)
+    @State private var isOn = false
     var body: some View {
         VStack {
-            Text("Anonymous view")
-            Text(viewmodel.anonymousId)
+            NavigationView {
+                Form {
+                    Section {
+                        HStack {
+                            Text("Current anonymous ID: \(outfitViewModel.anonynmousId)")
+                            Button("Change ID", action: {
+                                outfitViewModel.changeAnonymousId()
+                            })
+                        }
+                        Text("Selected situation is : \(selectedSituation)")
+                        Button("Send Data", action: {
+                            outfitViewModel.situationChoiceFromName(choice: selectedSituation)
+                            outfitViewModel.submitAnonymousData()
+                            
+                        })
+                    }
+                    Section {
+                        Picker("Situations", selection: $selectedSituation) {
+                            ForEach(outfitViewModel.situationTypeList, id: \.self) { option in
+                                                Text(option)
+                                            }
+                        }
+                    }
+                    Section {
+                        let list2:[String] = outfitViewModel.clothingTypeList
+                        List {
+                            ForEach(list2, id:\.self) { item in
+                                if let index = list2.firstIndex(where: { $0 == item }) {
+                                    Toggle(item, isOn: $isPushEnable[index])
+                                        .onChange(of: isPushEnable[index]) { _isOn in
+                                            outfitViewModel.addClothingNameToClothingWeather(clothing: list2[index])
+                                                }
+                                }
+                            }
+                        }
+                    }
+                }.navigationBarTitle(Text("Anonymous Submission"))
+            }
         }
     }
 }
 
 struct OutfitView: View {
     var viewmodel : MyOutfitViewModel
-    @State private var isPushEnable : [Bool] = [Bool](repeating: false,count: 20)
     var body: some View {
         VStack {
             Text("Outfit view")
-            let list2:[String] = viewmodel.clothingTypeList
-            List {
-                ForEach(list2, id:\.self) { item in
-                    if let index = list2.firstIndex(where: { $0 == item }) {
-                        Toggle(isOn: $isPushEnable[index]) {
-                            Text(item)
-                        }
-                    }
-                }
-            }
         }
     }
 }
@@ -118,7 +147,7 @@ struct OutfitView: View {
 #if DEBUG
 struct AnonymousView_Previews: PreviewProvider {
     static var previews: some View {
-        var viewmodel = MyOutfitViewModel()
+        let viewmodel = MyOutfitViewModel()
         AnonymousView(viewmodel: viewmodel)
     }
 }
@@ -127,7 +156,7 @@ struct AnonymousView_Previews: PreviewProvider {
 #if DEBUG
 struct OutfitView_Previews: PreviewProvider {
     static var previews: some View {
-        var viewmodel = MyOutfitViewModel()
+        let viewmodel = MyOutfitViewModel()
         OutfitView(viewmodel: viewmodel)
     }
 }

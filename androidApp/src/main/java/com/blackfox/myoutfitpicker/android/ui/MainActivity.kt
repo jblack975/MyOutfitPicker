@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -37,6 +38,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
+import org.koin.androidx.compose.inject
 import java.lang.Thread.sleep
 
 fun greet(): String {
@@ -73,10 +75,19 @@ class MainActivity : FragmentActivity() {
                     }
                     startActivityForResult(enrollIntent, 7654)
                 }
+                BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> {
+                    TODO()
+                }
+                BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                    TODO()
+                }
+                BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
+                    TODO()
+                }
             }
             showBiometricPrompt(viewModel = viewmodel)
 
-            MainScreen()
+            MainScreen(viewmodel)
         }
     }
     private fun showBiometricPrompt(viewModel: MyOutfitPickerViewModel)  {
@@ -166,7 +177,7 @@ sealed class NavRoutes(val route: String) {
     object Weather : NavRoutes("weather")
 }
 @Composable
-fun NavigationHost(navController: NavHostController) {
+fun NavigationHost(navController: NavHostController, viewmodel:MyOutfitPickerViewModel) {
     NavHost(
         navController = navController,
         startDestination = NavRoutes.Home.route,
@@ -176,11 +187,11 @@ fun NavigationHost(navController: NavHostController) {
         }
 
         composable(NavRoutes.Anonymous.route) {
-            AnonymousSendScreen()
+            AnonymousSendScreen(viewmodel)
         }
 
         composable(NavRoutes.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(viewmodel)
         }
 
         composable(NavRoutes.OutfitSelector.route) {
@@ -228,7 +239,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 
 @Preview
 @Composable
-fun MainScreen() {
+fun MainScreen(@PreviewParameter(ViewmodelProvider::class) viewmodel: MyOutfitPickerViewModel) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -240,7 +251,7 @@ fun MainScreen() {
         bottomBar = { BottomNavigationBar(navController = navController)}
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding),  propagateMinConstraints=true) {
-            NavigationHost(navController = navController)
+            NavigationHost(navController = navController, viewmodel = viewmodel)
         }
     }
 }
