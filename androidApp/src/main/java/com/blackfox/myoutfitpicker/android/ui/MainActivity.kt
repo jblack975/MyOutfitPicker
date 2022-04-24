@@ -75,6 +75,15 @@ class MainActivity : FragmentActivity() {
                     }
                     startActivityForResult(enrollIntent, 7654)
                 }
+                BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> {
+                    TODO()
+                }
+                BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                    TODO()
+                }
+                BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
+                    TODO()
+                }
             }
             showBiometricPrompt(viewModel = viewmodel)
 

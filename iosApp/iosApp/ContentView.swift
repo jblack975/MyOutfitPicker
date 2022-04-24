@@ -96,10 +96,15 @@ struct AnonymousView: View {
             NavigationView {
                 Form {
                     Section {
-                        Text("Current anonymous ID: \(outfitViewModel.anonynmousId)")
+                        HStack {
+                            Text("Current anonymous ID: \(outfitViewModel.anonynmousId)")
+                            Button("Change ID", action: {
+                                outfitViewModel.changeAnonymousId()
+                            })
+                        }
                         Text("Selected situation is : \(selectedSituation)")
                         Button("Send Data", action: {
-                            outfitViewModel.situationChoiceFromName(name: selectedSituation)
+                            outfitViewModel.situationChoiceFromName(choice: selectedSituation)
                             outfitViewModel.submitAnonymousData()
                             
                         })

@@ -6,7 +6,7 @@ object Versions {
     const val koin = "3.1.5"
     const val lifecycle = "2.2.0-alpha01"
 
-    const val compose = "1.2.0-alpha07"
+    const val compose = "1.2.0-alpha08"
     const val navCompose = "2.4.0-beta02"
     const val slf4j = "1.7.30"
 
