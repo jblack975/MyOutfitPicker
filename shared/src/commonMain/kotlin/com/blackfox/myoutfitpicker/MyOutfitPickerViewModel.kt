@@ -1,29 +1,49 @@
 package com.blackfox.myoutfitpicker
 
-import com.blackfox.myoutfitpicker.remote.WeatherApi
-import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class MyOutfitPickerViewModel() : SharedViewModel() {
     private val outfitPickerStore = OutfitPickerStore()
     private var situation:Situations? = null
     var activeUser = outfitPickerStore.fetchActiveUser
     var anonynmousId = outfitPickerStore.fetchAnonymousId
+    fun monthlyForecast(city:String) : MonthlyForecast? {
+        return runBlocking {
+            val job = async(Dispatchers.Default) {
+                outfitPickerStore.retrieveMonthlyForecastByCity(city)
+            }
+            job.start()
+            return@runBlocking job.await().also { it }
+        }
+    }
+    fun currentWeather(city:String) : CurrentForecast? {
+        return runBlocking {
+            val job: Deferred<CurrentForecast?> = async(Dispatchers.Default) {
+                outfitPickerStore.retrieveCurrentWeatherByCity(city)
+            }
+            job.start()
+            return@runBlocking job.await()
+        }
+    }
     var readyToSubmit = MutableSharedFlow<Boolean>(1)
     var currentWeatherFlow = MutableSharedFlow<MainTemperature>(1)
     fun changeAnonymousId() : String {
-        // TODO: Change this to something better
-        runBlocking {
-            outfitPickerStore.saveAnonymousId("s9dfhjsphfsp")
-        }
-        return "aaaaa"
+        val s = (1..Companion.STRING_LENGTH)
+            .map { _ -> kotlin.random.Random.nextInt(0, Companion.charPool.size) }
+            .map(Companion.charPool::get)
+            .joinToString("");
+        println("changeAnonymousId: $s")
+        return runBlocking {
+            val job: Deferred<Unit> = async(Dispatchers.Default) {
+                outfitPickerStore.saveAnonymousId(s)
+            }
+            job.start()
+            job.await()
+            return@runBlocking s
+        }.also { anonynmousId = it }
     }
     var appIntro = """
 Welcome to MyOutfitPicker. 
@@ -34,14 +54,13 @@ You can also anonymously send information to use a training and that ID is never
     var biomentricsPassed:Boolean? = null
     val situationTypeList = Situations.values().map{it.situationalName}
     var clothingWeatherData:ClothingWeatherModel = ClothingWeatherModel(emptyList(), null, null, id=anonynmousId)
-    fun addClothingNameToClothingWeather(clothing:String) {
-        val clothEnum = ClothingTypes.values().asList().filter { it.clothingLabel == clothing }
-        println("Found enum $clothEnum for $clothing")
-        addClothingToClothingWeather(clothEnum.firstOrNull() ?: ClothingTypes.OTHER)
+    fun situationChoiceFromName(choice:String) {
+        val a = Situations.values().find { it.situationalName == choice } ?: Situations.GYM
+        situationChoice = a
     }
-    fun situationChoiceFromName(name:String) {
-        val situationEnum = Situations.values().asList().filter{ it.situationalName == name }
-        situationChoice = situationEnum.firstOrNull() ?: Situations.GYM
+    fun addClothingNameToClothingWeather(clothing:String) {
+        val a = ClothingTypes.values().find { it.clothingLabel == clothing } ?: ClothingTypes.OTHER
+        addClothingToClothingWeather(a)
     }
     fun addClothingToClothingWeather(clothing:ClothingTypes) {
         val list = clothingWeatherData.clothing?.toMutableList()
@@ -67,6 +86,11 @@ You can also anonymously send information to use a training and that ID is never
                 clothingWeatherData =
                     ClothingWeatherModel(emptyList(), null, null, id = anonynmousId)
         }
+    }
+
+    companion object {
+        const val STRING_LENGTH = 48;
+        val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
     }
 }
 
