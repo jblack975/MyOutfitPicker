@@ -37,7 +37,7 @@ fun Application.configureRouting() {
             val request =
                 httpClient.get("'https://community-open-weather-map.p.rapidapi.com/climate/month?q=${city}")
             launch {
-                val s = "test"//request.bodyAsText()
+                val s = "test response"//request.bodyAsText()
                 println(s.toString())
                 call.respondText(s)
             }
