@@ -1,8 +1,6 @@
 package com.blackfox.myoutfitpicker.api
 
-import com.blackfox.myoutfitpicker.CurrentForecast
-import com.blackfox.myoutfitpicker.ErrorModel
-import com.blackfox.myoutfitpicker.MonthlyForecast
+import com.blackfox.myoutfitpicker.*
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
@@ -10,7 +8,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import com.blackfox.myoutfitpicker.BuildKonfig
 
 /*
 val request = Request.Builder()
