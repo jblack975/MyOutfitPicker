@@ -3,6 +3,7 @@ package com.blackfox.myoutfitpicker.repository
 import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.CurrentForecast
 import com.blackfox.myoutfitpicker.MonthlyForecast
+import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -18,7 +19,7 @@ class WeatherRepository : KoinComponent {
         return weatherApi.retrieveCurrentWeatherByCity(city)
     }
 
-    suspend fun saveAnonymousData(data:ClothingWeatherModel) {
+    suspend fun saveAnonymousData(data: ClothingWeatherModel) {
         val succeeded = weatherApi.sendUserData(data)
         if(!succeeded) {
             // cache the data

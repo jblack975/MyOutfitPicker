@@ -16,7 +16,7 @@ class MyOutfitPickerViewModel() : SharedViewModel() {
                 outfitPickerStore.retrieveMonthlyForecastByCity(city)
             }
             job.start()
-            return@runBlocking job.await().also { it }
+            return@runBlocking job.await()
         }
     }
     fun currentWeather(city:String) : CurrentForecast? {
@@ -54,15 +54,6 @@ You can also anonymously send information to use a training and that ID is never
     var biomentricsPassed:Boolean? = null
     val situationTypeList = Situations.values().map{it.situationalName}
     var clothingWeatherData:ClothingWeatherModel = ClothingWeatherModel(emptyList(), null, null, id=anonynmousId)
-<<<<<<< HEAD
-    fun situationChoiceFromName(choice:String) {
-        val a = Situations.values().find { it.situationalName == choice } ?: Situations.GYM
-        situationChoice = a
-    }
-    fun addClothingNameToClothingWeather(clothing:String) {
-        val a = ClothingTypes.values().find { it.clothingLabel == clothing } ?: ClothingTypes.OTHER
-        addClothingToClothingWeather(a)
-=======
     fun addClothingNameToClothingWeather(clothing:String) {
         val clothEnum = ClothingTypes.values().asList().filter { it.clothingLabel == clothing }
         println("Found enum $clothEnum for $clothing")
@@ -71,7 +62,6 @@ You can also anonymously send information to use a training and that ID is never
     fun situationChoiceFromName(name:String) {
         val situationEnum = Situations.values().asList().filter{ it.situationalName == name }
         situationChoice = situationEnum.firstOrNull() ?: Situations.GYM
->>>>>>> 7b9f16b547f17ea0a8e724376d4e5990ac872f09
     }
     fun addClothingToClothingWeather(clothing:ClothingTypes) {
         val list = clothingWeatherData.clothing?.toMutableList()
