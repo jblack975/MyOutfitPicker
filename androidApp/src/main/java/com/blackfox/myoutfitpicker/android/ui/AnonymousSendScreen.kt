@@ -12,17 +12,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import com.blackfox.myoutfitpicker.ClothingTypes
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import com.blackfox.myoutfitpicker.Situations
+import com.blackfox.myoutfitpicker.android.BuildConfig
+import com.blackfox.myoutfitpicker.android.appModule
+import com.blackfox.myoutfitpicker.di.initKoin
 import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.compose.inject
+import org.koin.core.logger.Level
 
+/* This doesn't work atm as the viewmodel needs Koin to inject other dependencies. */
+class ViewmodelProvider: PreviewParameterProvider<MyOutfitPickerViewModel> {
+    init {
+        initKoin() {
+            // https://github.com/InsertKoinIO/koin/issues/1188
+            androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
+            modules(appModule)
+        }
+    }
+    override  val values: Sequence<MyOutfitPickerViewModel> = sequenceOf<MyOutfitPickerViewModel>(MyOutfitPickerViewModel())
+
+}
 @Preview
 @Composable
-fun AnonymousSendScreen() {
-    val viewmodel : MyOutfitPickerViewModel by inject()
+fun AnonymousSendScreen(@PreviewParameter(ViewmodelProvider::class) viewmodel : MyOutfitPickerViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val checkedState = remember { mutableStateOf(List(ClothingTypes.getNumberOfItems()) { false }) }
 
