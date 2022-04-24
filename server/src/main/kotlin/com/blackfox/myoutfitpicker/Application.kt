@@ -1,10 +1,11 @@
 package com.blackfox.myoutfitpicker
 
 import com.blackfox.myoutfitpicker.plugins.configureCallLogging
-import io.ktor.server.application.*
 import com.blackfox.myoutfitpicker.plugins.configureRouting
+import io.ktor.server.application.*
 import com.blackfox.myoutfitpicker.plugins.configureSerialization
 import com.blackfox.myoutfitpicker.plugins.configureStatusPages
+import kotlinx.serialization.Serializable
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -13,8 +14,41 @@ fun Application.module() {
     configureStatusPages()
     configureCallLogging()
     configureSerialization()
-    try {
-        //val s = println(Platform().platform)
-    } catch(e:Throwable) { println("Wrong shared subproject.")}
 }
 
+@Serializable
+data class ErrorModel(val cod:Int, val message:String)
+
+@Serializable
+data class CurrentForecast(val coord: Coordinates, val weather: List<Weather>, val base:String, val main:MainTemperature, val visibility:Int, val wind:WindModel, val clouds:CloudModel,
+                           val dt:Long, val sys:SysModel, val timezone:Int, val id:Int, val name:String, val cod:Int)
+
+@Serializable
+data class Weather(val id:Int, val main:String, val description:String, val icon:String)
+
+@Serializable
+data class MainTemperature(val temp: Double, val feels_like:Double, val temp_min:Double, val temp_max:Double, val pressure: Double, val humidity: Double, val sea_level:Int? = null, val grnd_level:Int? = null)
+
+@Serializable
+data class WindModel(val speed:Double, val deg: Int, val gust:Double? = null)
+
+@Serializable
+data class SysModel(val type:Int, val id:Int, val country:String, val sunrise:Long, val sunset:Long)
+
+@Serializable
+data class CloudModel(val all:Int)
+
+@Serializable
+data class MonthlyForecast(val cod:Int, val city:City, val message:Double?, val list:List<Forecast>?)
+
+@Serializable
+data class City(val id:Int, val name:String,val coord:Coordinates, val country:String)
+
+@Serializable
+data class Coordinates(val lon:Double, val lat: Double)
+
+@Serializable
+data class Forecast(val dt:Long, val humidity:Double, val pressure:Double, val temp: Temperature, val wind_speed:Double)
+
+@Serializable
+data class Temperature(val average:Double, val average_max:Double, val average_min:Double, val record_max:Double, val record_min:Double)

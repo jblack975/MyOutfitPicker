@@ -1,6 +1,7 @@
 package com.blackfox.myoutfitpicker.plugins
 
-import com.blackfox.myoutfitpicker.Platform
+import com.blackfox.myoutfitpicker.apiKey
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -9,11 +10,12 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.Identity.encode
+import io.netty.handler.codec.DateFormatter.append
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun Application.configureRouting() {
-    val API_KEY = Platform().apiKey
+    val API_KEY = apiKey
     install(Routing) {
         get("/weather") {
                 call.respondText("current weather")
@@ -30,17 +32,15 @@ fun Application.configureRouting() {
         }
         get("/weather/monthly/{city}") {
             val city = call.parameters.get("city")
-            val httpClient = createHttpClient().let {
-                headersOf("X-RapidAPI-Host", "community-open-weather-map.p.rapidapi.com")
-                headersOf("X-RapidAPI-Key", API_KEY)
-            }
-            val request =
-                httpClient.get("'https://community-open-weather-map.p.rapidapi.com/climate/month?q=${city}")
-            launch {
-                val s = "test response"//request.bodyAsText()
-                println(s.toString())
-                call.respondText(s)
-            }
+            val httpClient = createHttpClient()
+            val response =
+                httpClient.get("https://community-open-weather-map.p.rapidapi.com/climate/month?q=${city}") {
+                    headers {
+                        append("X-RapidAPI-Host", "community-open-weather-map.p.rapidapi.com")
+                        append("X-RapidAPI-Key", API_KEY)
+                    }
+                }.body<String>()
+            call.respondText(response)
         }
         post("/outfit_data") {
             val data = call.receive<String>()
