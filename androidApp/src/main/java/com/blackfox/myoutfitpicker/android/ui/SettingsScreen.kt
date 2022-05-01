@@ -13,9 +13,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import org.koin.androidx.compose.inject
 
-@Preview
 @Composable
-fun SettingsScreen(@PreviewParameter(ViewmodelProvider::class) viewmodel : MyOutfitPickerViewModel) {
+fun SettingsScreen(viewmodel : MyOutfitPickerViewModel) {
     Scaffold(topBar = { TopAppBar(title = { Text("Settings") }) }) { paddingValue ->
         Column(
             Modifier

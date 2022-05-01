@@ -1,4 +1,4 @@
-package com.blackfox.myoutfitpicker.android.ui
+package com.blackfox.myoutfitpicker.android
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -38,6 +38,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
+import com.blackfox.myoutfitpicker.android.ui.*
 import org.koin.androidx.compose.inject
 import java.lang.Thread.sleep
 
@@ -183,7 +184,7 @@ fun NavigationHost(navController: NavHostController, viewmodel:MyOutfitPickerVie
         startDestination = NavRoutes.Home.route,
     ) {
         composable(NavRoutes.Home.route) {
-            HomeScreen()
+            HomeScreen(viewmodel)
         }
 
         composable(NavRoutes.Anonymous.route) {
@@ -195,11 +196,11 @@ fun NavigationHost(navController: NavHostController, viewmodel:MyOutfitPickerVie
         }
 
         composable(NavRoutes.OutfitSelector.route) {
-            OutfitSelectorScreen()
+            OutfitSelectorScreen(viewmodel)
         }
 
         composable(NavRoutes.Weather.route) {
-            WeatherScreen()
+            WeatherScreen(viewmodel)
         }
     }
 }

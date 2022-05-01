@@ -55,7 +55,7 @@ fun AnonymousSendScreen(@PreviewParameter(ViewmodelProvider::class) viewmodel : 
                 Text(text = viewmodel.anonynmousId)
                 Button(onClick = {
                     println("button clicked")
-                        viewmodel.submitAnonymousData()
+                    viewmodel.submitAnonymousData()
                 }, enabled=viewmodel.readyToSubmit.collectAsState(initial = false).value) {
                     Text("Submit Data")
                 }

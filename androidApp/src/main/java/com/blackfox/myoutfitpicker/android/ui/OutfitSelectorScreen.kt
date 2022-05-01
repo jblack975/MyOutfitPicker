@@ -17,9 +17,7 @@ import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import org.koin.androidx.compose.inject
 import java.util.*
 
-@Preview
 @Composable
-fun OutfitSelectorScreen() {
-    val viewmodel : MyOutfitPickerViewModel by inject()
+fun OutfitSelectorScreen(viewmodel : MyOutfitPickerViewModel) {
     Text("Show forecast and results from model")
 }

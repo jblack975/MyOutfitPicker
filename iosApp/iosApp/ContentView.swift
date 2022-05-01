@@ -4,6 +4,7 @@ import LocalAuthentication
 
 struct ContentView: View {
     var viewmodel : MyOutfitViewModel
+    var loginViewModel: LoginViewModel
     @State private var isUnlocked = false
     func authenticate() {
         let context = LAContext()
@@ -18,13 +19,13 @@ struct ContentView: View {
                 // authentication has now completed
                 if success {
                     isUnlocked = true
-                    viewmodel.wasAuthenticated = true
+                    loginViewModel.wasAuthenticated = true
                 } else {
                     context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, authenticationError in
                         // authentication has now completed
                         if success {
                             isUnlocked = true
-                            viewmodel.wasAuthenticated = true
+                            loginViewModel.wasAuthenticated = true
                         } else {
                         }
                     }
@@ -66,7 +67,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewmodel = MyOutfitViewModel()
-        ContentView(viewmodel: viewmodel)
+        let loginViewModel = LoginViewModel()
+        ContentView(viewmodel: viewmodel, loginViewModel: loginViewModel)
     }
 }
 #endif
@@ -137,9 +139,19 @@ struct AnonymousView: View {
 
 struct OutfitView: View {
     var viewmodel : MyOutfitViewModel
+    @State var city:String = ""
     var body: some View {
         VStack {
             Text("Outfit view")
+            TextField("City", text: $city) {
+                Text("City, State")
+            }
+            Button(action: {}) {
+                Text("Current Weather")
+            }
+            Button(action: {}) {
+                Text("Monthly Weather")
+            }
         }
     }
 }

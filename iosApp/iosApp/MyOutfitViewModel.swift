@@ -8,33 +8,30 @@
 
 import Foundation
 import shared
+import KMPNativeCoroutinesAsync
 
+@MainActor
 class MyOutfitViewModel : ObservableObject {
-    private var _wasAuthenticated = false
+    @Published var currentForecast = [CurrentForecast]()
+    @Published var monthlyForecast = [MonthlyForecast]()
     private let viewModel = MyOutfitPickerViewModel()
     private let store = OutfitPickerStore()
-    var anonymousId: String {
+    
+    var appIntro : String {
         get {
-            viewModel.anonynmousId
+            viewModel.appIntro
         }
     }
+}
+
+class LoginViewModel: ObservableObject {
+    private var _wasAuthenticated = false
     var wasAuthenticated:Bool {
         set(value) {
             _wasAuthenticated = value
         }
         get {
             return _wasAuthenticated
-        }
-    }
-    
-    var clothingTypeList : [String] {
-        get {
-            viewModel.clothingTypeList
-        }
-    }
-    var appIntro : String {
-        get {
-            viewModel.appIntro
         }
     }
 }

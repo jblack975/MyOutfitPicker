@@ -57,6 +57,8 @@ kotlin {
                 implementation(Deps.coroutines)
                 implementation("com.russhwolf:multiplatform-settings-coroutines:0.8.1")
                 implementation("com.benasher44:uuid:0.4.0")
+
+//                implementation("org.kodein.db:kodein-db:0.9.0-beta")
             }
         }
         val commonTest by getting {

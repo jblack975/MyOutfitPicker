@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+//import org.kodein.memory.util.currentTimestampMillis
 
 class SettingsStorage(
     private val viewModel: SharedViewModel,
@@ -28,6 +29,22 @@ class SettingsStorage(
                 Json.decodeFromString(it)
             }
 
+    suspend fun checkCurrentWeatherByCity(city:String) : CurrentForecast? {
+        val weather = settings.getStringOrNull("current_$city")
+        return if(weather != null && weather.length > 20) {
+            val a = Json.decodeFromString<CurrentForecast>(weather)
+            //if(a.dt + (1000 * 60 * 5) < currentTimestampMillis()) a else null
+            a
+        } else null
+    }
+    suspend fun checkMonthlyWeatherByCity(city:String) : MonthlyForecast? {
+        val weather = settings.getStringOrNull("monthly_$city")
+        return if(weather != null && weather.length > 20) {
+            val a = Json.decodeFromString<MonthlyForecast>(weather)
+            //if(a.dt < currentTimestampMillis()) a else null
+            a
+        } else null
+    }
     suspend fun addRecentCity(city: String) {
         val recentCitiesSerialized = settings.getStringOrNull(SETTINGS_CITY_LIST)
         val recentCitiesList: MutableSet<String> = if (recentCitiesSerialized == null) {
@@ -42,6 +59,25 @@ class SettingsStorage(
         settings.putString(SETTINGS_CITY_LIST, resultSerialized)
     }
 
+    var celsiusTemperatureSettings: Boolean
+        set(isCelsius) {
+            runBlocking {
+                saveTemperatureSettings(isCelsius)
+            }
+        }
+        get() {
+            return runBlocking {
+                return@runBlocking getTemperatureSettings()
+            }
+        }
+
+    suspend fun saveTemperatureSettings(isCelsius: Boolean) {
+        settings.putBoolean(SETTINGS_DEGREE_TYPE, isCelsius)
+    }
+
+    suspend fun getTemperatureSettings(): Boolean {
+        return settings.getBooleanOrNull(SETTINGS_DEGREE_TYPE) ?: true
+    }
     suspend fun saveAnonymousId(anonId: String) {
         settings.putString(SETTINGS_ANONYMOUS_ID, anonId)
     }
@@ -59,5 +95,13 @@ class SettingsStorage(
             }
             return@runBlocking s
         }
+    }
+
+    suspend fun saveCurrentWeatherByCity(city: String, a: CurrentForecast?) {
+        settings.putString("current_$city", Json.encodeToString(a))
+    }
+
+    suspend fun saveMonthlyWeatherByCity(city: String, a: MonthlyForecast?) {
+        settings.putString("monthly_$city", Json.encodeToString(a))
     }
 }

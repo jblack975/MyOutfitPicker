@@ -25,6 +25,20 @@ class OutfitPickerStore : KoinComponent {
     suspend fun saveAnonymousId(id: String) {
         settingsStorage.saveAnonymousId(id)
     }
+
+    suspend fun saveCurrentWeatherbyCity(city: String, a: CurrentForecast?) {
+        settingsStorage.saveCurrentWeatherByCity(city, a)
+    }
+
+    suspend fun saveMonthlyWeatherbyCity(city: String, a: MonthlyForecast?) {
+        settingsStorage.saveMonthlyWeatherByCity(city, a)
+    }
+    suspend fun checkCurrentWeatherByCity(city: String) : CurrentForecast? {
+        return settingsStorage.checkCurrentWeatherByCity(city)
+    }
+    suspend fun checkMonthlyWeatherByCity(city: String)  : MonthlyForecast? {
+        return settingsStorage.checkMonthlyWeatherByCity(city)
+    }
 }
 
 enum class ClothingTypes(val clothingLabel:String) {

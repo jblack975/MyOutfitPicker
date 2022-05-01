@@ -8,10 +8,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import org.koin.androidx.compose.inject
 
-@Preview
 @Composable
-fun HomeScreen() {
-    val viewmodel : MyOutfitPickerViewModel by inject()
+fun HomeScreen(viewmodel : MyOutfitPickerViewModel) {
     Column {
         Text(text = viewmodel.appIntro, style = MaterialTheme.typography.h6)
     }

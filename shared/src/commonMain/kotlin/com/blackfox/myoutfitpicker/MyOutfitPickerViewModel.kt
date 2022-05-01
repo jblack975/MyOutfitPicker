@@ -2,30 +2,72 @@ package com.blackfox.myoutfitpicker
 
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.serialization.Serializable
 
 class MyOutfitPickerViewModel() : SharedViewModel() {
     private val outfitPickerStore = OutfitPickerStore()
     private var situation:Situations? = null
+    private var _currentForecast = MutableStateFlow<CurrentForecast?>(null)
+    private var currentForecast: StateFlow<CurrentForecast?> = _currentForecast
+    private var _monthlyForecast= MutableStateFlow<MonthlyForecast?>(null)
+    private var monthlyForecast: StateFlow<MonthlyForecast?> = _monthlyForecast
     var activeUser = outfitPickerStore.fetchActiveUser
     var anonynmousId = outfitPickerStore.fetchAnonymousId
     fun monthlyForecast(city:String) : MonthlyForecast? {
         return runBlocking {
             val job = async(Dispatchers.Default) {
-                outfitPickerStore.retrieveMonthlyForecastByCity(city)
+                var a = outfitPickerStore.retrieveMonthlyForecastByCity(city)
+                if(a == null) {
+                    outfitPickerStore.retrieveMonthlyForecastByCity(city)
+                    outfitPickerStore.saveMonthlyWeatherbyCity(city, a)
+                }
+                a
             }
             job.start()
             return@runBlocking job.await()
         }
     }
-    fun currentWeather(city:String) : CurrentForecast? {
+    fun currentWeather(city:String) : Boolean {
         return runBlocking {
-            val job: Deferred<CurrentForecast?> = async(Dispatchers.Default) {
-                outfitPickerStore.retrieveCurrentWeatherByCity(city)
+            val job: Deferred<CurrentForecast?> = async(coroutineContext) {
+                var a = outfitPickerStore.checkCurrentWeatherByCity(city)
+                if(a == null) {
+                    try {
+                        a = outfitPickerStore.retrieveCurrentWeatherByCity(city)
+                        outfitPickerStore.saveCurrentWeatherbyCity(city, a)
+                    } catch(e:Exception) { println(e.message)}
+                }
+                a
             }
             job.start()
-            return@runBlocking job.await()
+            val a = job.await()
+            a?.main.let {
+                if (it != null) {
+                    currentWeatherFlow.tryEmit(it)
+                }
+            }
+            _currentForecast.tryEmit(a)
+        }
+    }
+    fun monthlyWeather(city:String) : Boolean {
+        return runBlocking {
+            val job: Deferred<MonthlyForecast?> = async(coroutineContext) {
+                var a = outfitPickerStore.checkMonthlyWeatherByCity(city)
+                if(a == null) {
+                    try {
+                        a = outfitPickerStore.retrieveMonthlyForecastByCity(city)
+                        outfitPickerStore.saveMonthlyWeatherbyCity(city, a)
+                    } catch (e: Exception) {
+                        println(e.message)
+                    }
+                }
+                a
+            }
+            job.start()
+            val a = job.await()
+            val b = _monthlyForecast.tryEmit(a)
+            b
         }
     }
     var readyToSubmit = MutableSharedFlow<Boolean>(1)
@@ -69,6 +111,14 @@ You can also anonymously send information to use a training and that ID is never
         clothingWeatherData.clothing = list?.toList()
         readyToSubmit.tryEmit(clothingWeatherData.clothing?.isNotEmpty() == true && clothingWeatherData.situation != null)
     }
+    val currentWeather: StateFlow<CurrentForecast?>
+        get() {
+            return currentForecast
+        }
+    val monthlyWeather: StateFlow<MonthlyForecast?>
+        get() {
+            return monthlyForecast
+        }
     var situationChoice: Situations?
         get() {
             return situation
