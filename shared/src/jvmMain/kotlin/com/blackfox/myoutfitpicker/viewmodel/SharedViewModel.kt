@@ -5,6 +5,7 @@ import com.blackfox.myoutfitpicker.CurrentForecast
 import com.blackfox.myoutfitpicker.MonthlyForecast
 import com.blackfox.myoutfitpicker.repository.WeatherRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable

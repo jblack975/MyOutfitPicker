@@ -1,16 +1,14 @@
-import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
-
 plugins {
     id("com.android.application")
     kotlin("android")
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         applicationId = "com.blackfox.myoutfitpicker.android"
         minSdk = 30
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }
@@ -23,11 +21,11 @@ android {
         compose = true
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     composeOptions {
@@ -47,11 +45,12 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    namespace = "com.blackfox.myoutfitpicker.android"
 }
 
 dependencies {
     implementation(project(":shared"))
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(Compose.runtime)
 
     implementation(Compose.ui)
@@ -61,7 +60,7 @@ dependencies {
     implementation(Compose.material)
     implementation(Compose.navigation)
 
-    implementation("androidx.glance:glance-appwidget:1.0.0-alpha03")
+    implementation("androidx.glance:glance-appwidget:1.0.0-alpha04")
 
     implementation("androidx.biometric:biometric:1.2.0-alpha04")
     // kermit
@@ -73,10 +72,10 @@ dependencies {
 
     implementation(Ktor.clientAndroid)
     implementation(Ktor.clientCore)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:runner:1.4.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.1.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.1.1")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.2.1")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
 }

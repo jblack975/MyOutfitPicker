@@ -1,10 +1,12 @@
 import SwiftUI
 import shared
 import LocalAuthentication
+import KMPNativeCoroutinesAsync
 
 struct ContentView: View {
     var viewmodel : MyOutfitViewModel
     var loginViewModel: LoginViewModel
+    var outfitViewModel: MyOutfitPickerViewModel
     @State private var isUnlocked = false
     func authenticate() {
         let context = LAContext()
@@ -40,19 +42,23 @@ struct ContentView: View {
                 TabView {
                     HomeView(viewmodel: viewmodel)
                         .tabItem {
-                            Label("Home", systemImage: "list.dash")
+                            Label("Home", systemImage: "homepod.2")
                         }
                     OutfitView(viewmodel: viewmodel)
                         .tabItem {
-                            Label("Outfit", systemImage: "square.and.pencil")
+                            Label("Outfit", systemImage: "mouth")
+                        }
+                    WeatherView(viewmodel: viewmodel, outfitViewModel: outfitViewModel)
+                        .tabItem {
+                            Label("Weather", systemImage: "cloud.bolt")
                         }
                     AnonymousView(viewmodel: viewmodel)
                         .tabItem {
-                            Label("Anonymous", systemImage: "list.dash")
+                            Label("Anonymous", systemImage: "airplane.circle")
                         }
                     SettingsView(viewmodel: viewmodel)
                         .tabItem {
-                            Label("Settings", systemImage: "list.dash")
+                            Label("Settings", systemImage: "gear")
                         }
                 }
             } else {
@@ -68,11 +74,47 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewmodel = MyOutfitViewModel()
         let loginViewModel = LoginViewModel()
-        ContentView(viewmodel: viewmodel, loginViewModel: loginViewModel)
+        let outfitViewModel = MyOutfitPickerViewModel()
+        ContentView(viewmodel: viewmodel, loginViewModel: loginViewModel, outfitViewModel: outfitViewModel)
     }
 }
 #endif
 
+struct WeatherView: View {
+    var viewmodel : MyOutfitViewModel
+    var outfitViewModel:MyOutfitPickerViewModel
+    @State var city:String = ""
+    var body: some View {
+//        Form {
+//            Section {
+                VStack(alignment: .center) {
+                    TextField("City", text: $city) {
+                        Text("City, State")
+                    }
+                    
+                    Button(action: {
+                        let a = outfitViewModel.currentWeatherFlow
+                    }) {
+                        Text("Current Weather")
+                    }
+                     
+                    
+                    Button(action: {
+                        let b = outfitViewModel.monthlyWeatherFlow
+                    }) {
+                        Text("Monthly Weather")
+                    }
+                     
+//                }
+//            }
+            /*
+            Section {
+                Text(outfitViewModel.currentWeatherFlow.collect(collector: <#T##Kotlinx_coroutines_coreFlowCollector#>, completionHandler: {_,_ in }))
+            }
+             */
+        }
+    }
+}
 struct HomeView: View {
     let viewmodel : MyOutfitViewModel
     var body: some View {
@@ -114,8 +156,8 @@ struct AnonymousView: View {
                     Section {
                         Picker("Situations", selection: $selectedSituation) {
                             ForEach(outfitViewModel.situationTypeList, id: \.self) { option in
-                                                Text(option)
-                                            }
+                                Text(option)
+                            }
                         }
                     }
                     Section {
@@ -126,7 +168,7 @@ struct AnonymousView: View {
                                     Toggle(item, isOn: $isPushEnable[index])
                                         .onChange(of: isPushEnable[index]) { _isOn in
                                             outfitViewModel.addClothingNameToClothingWeather(clothing: list2[index])
-                                                }
+                                        }
                                 }
                             }
                         }
@@ -139,20 +181,8 @@ struct AnonymousView: View {
 
 struct OutfitView: View {
     var viewmodel : MyOutfitViewModel
-    @State var city:String = ""
     var body: some View {
-        VStack {
-            Text("Outfit view")
-            TextField("City", text: $city) {
-                Text("City, State")
-            }
-            Button(action: {}) {
-                Text("Current Weather")
-            }
-            Button(action: {}) {
-                Text("Monthly Weather")
-            }
-        }
+        Text("Outfit view")
     }
 }
 
@@ -170,6 +200,16 @@ struct OutfitView_Previews: PreviewProvider {
     static var previews: some View {
         let viewmodel = MyOutfitViewModel()
         OutfitView(viewmodel: viewmodel)
+    }
+}
+#endif
+
+#if DEBUG
+struct WeatherView_Previews: PreviewProvider {
+    static var previews: some View {
+        let viewmodel = MyOutfitViewModel()
+        let outfitViewModel = MyOutfitPickerViewModel()
+        WeatherView(viewmodel: viewmodel, outfitViewModel: outfitViewModel)
     }
 }
 #endif

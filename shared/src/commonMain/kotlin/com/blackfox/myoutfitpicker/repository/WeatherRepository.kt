@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker.repository
 
+import co.touchlab.kermit.Logger
 import com.blackfox.myoutfitpicker.ClothingWeatherModel
 import com.blackfox.myoutfitpicker.CurrentForecast
 import com.blackfox.myoutfitpicker.MonthlyForecast
@@ -10,7 +11,7 @@ import org.koin.core.component.inject
 
 class WeatherRepository : KoinComponent {
     private val weatherApi: WeatherApi by inject()
-
+    val logger:Logger by inject()
     suspend fun retrieveMonthlyForecastByCity(city: String): MonthlyForecast? {
         return weatherApi.retrieveMonthlyForecastByCity(city)
     }

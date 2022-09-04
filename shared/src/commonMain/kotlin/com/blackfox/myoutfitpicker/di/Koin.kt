@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker.di
 
+import co.touchlab.kermit.LoggerConfig
 import com.blackfox.myoutfitpicker.MyOutfitPickerViewModel
 import com.blackfox.myoutfitpicker.OutfitPickerStore
 import com.blackfox.myoutfitpicker.remote.WeatherApi
@@ -26,6 +27,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
 fun initKoin() = initKoin {}
 
 fun commonModule() = module {
+    single { co.touchlab.kermit.Logger(LoggerConfig.default)}
     single { createHttpClient() }
     single { WeatherApi(get()) }
     single { WeatherRepository() }

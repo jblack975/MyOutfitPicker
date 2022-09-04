@@ -109,19 +109,23 @@ kotlin {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 30
-        targetSdk = 32
+        targetSdk = 33
+    }
+    namespace = "com.blackfox.myoutfitpicker"
+    compileOptions {
+        sourceCompatibility=JavaVersion.VERSION_11
+        targetCompatibility=JavaVersion.VERSION_11
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-        freeCompilerArgs = listOf("-Xskip-prerelease-check",
-            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi", "-Xjvm-default=all"
+        jvmTarget = JavaVersion.VERSION_11.toString()
+        freeCompilerArgs = listOf("-Xjvm-default=all"
         )
     }
 }
@@ -144,6 +148,16 @@ buildkonfig {
             type = STRING,
             name = "weather_client_host_name",
             value = findProperty("weather_client_host_name") as? String ?: throw Exception("Need a local host name")
+        )
+        buildConfigField(
+            type = STRING,
+            name = "meteo_username",
+            value = findProperty("meteo_username") as? String ?: throw Exception("Need a local host name")
+        )
+        buildConfigField(
+            type = STRING,
+            name = "meteo_password",
+            value = findProperty("meteo_password") as? String ?: throw Exception("Need a local host name")
         )
     }
 }

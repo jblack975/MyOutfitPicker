@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker
 
+import co.touchlab.kermit.Logger
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -7,18 +8,18 @@ import kotlinx.serialization.Serializable
 
 class MyOutfitPickerViewModel() : SharedViewModel() {
     private val outfitPickerStore = OutfitPickerStore()
-    private var situation:Situations? = null
+    private var situation: Situations? = null
     private var _currentForecast = MutableStateFlow<CurrentForecast?>(null)
     private var currentForecast: StateFlow<CurrentForecast?> = _currentForecast
-    private var _monthlyForecast= MutableStateFlow<MonthlyForecast?>(null)
+    private var _monthlyForecast = MutableStateFlow<MonthlyForecast?>(null)
     private var monthlyForecast: StateFlow<MonthlyForecast?> = _monthlyForecast
     var activeUser = outfitPickerStore.fetchActiveUser
     var anonynmousId = outfitPickerStore.fetchAnonymousId
-    fun monthlyForecast(city:String) : MonthlyForecast? {
+    fun monthlyForecast(city: String): MonthlyForecast? {
         return runBlocking {
             val job = async(Dispatchers.Default) {
                 var a = outfitPickerStore.retrieveMonthlyForecastByCity(city)
-                if(a == null) {
+                if (a == null) {
                     outfitPickerStore.retrieveMonthlyForecastByCity(city)
                     outfitPickerStore.saveMonthlyWeatherbyCity(city, a)
                 }
@@ -28,49 +29,41 @@ class MyOutfitPickerViewModel() : SharedViewModel() {
             return@runBlocking job.await()
         }
     }
-    fun currentWeather(city:String) : Boolean {
-        return runBlocking {
-            val job: Deferred<CurrentForecast?> = async(coroutineContext) {
-                var a = outfitPickerStore.checkCurrentWeatherByCity(city)
-                if(a == null) {
-                    try {
-                        a = outfitPickerStore.retrieveCurrentWeatherByCity(city)
-                        outfitPickerStore.saveCurrentWeatherbyCity(city, a)
-                    } catch(e:Exception) { println(e.message)}
-                }
-                a
+
+    suspend fun currentWeather(city: String): CurrentForecast? {
+
+        var a = outfitPickerStore.checkCurrentWeatherByCity(city)
+        if (a == null) {
+            try {
+                a = outfitPickerStore.retrieveCurrentWeatherByCity(city)
+                outfitPickerStore.saveCurrentWeatherbyCity(city, a)
+            } catch (e: Exception) {
+                println(e.message)
             }
-            job.start()
-            val a = job.await()
-            a?.main.let {
-                if (it != null) {
-                    currentWeatherFlow.tryEmit(it)
-                }
-            }
-            _currentForecast.tryEmit(a)
         }
+        println("currentWeather: Returned from web call, doing try Emit for $a")
+        _currentForecast.tryEmit(a)
+        return a
     }
-    fun monthlyWeather(city:String) : Boolean {
-        return runBlocking {
-            val job: Deferred<MonthlyForecast?> = async(coroutineContext) {
-                var a = outfitPickerStore.checkMonthlyWeatherByCity(city)
-                if(a == null) {
-                    try {
-                        a = outfitPickerStore.retrieveMonthlyForecastByCity(city)
-                        outfitPickerStore.saveMonthlyWeatherbyCity(city, a)
-                    } catch (e: Exception) {
-                        println(e.message)
-                    }
-                }
-                a
+
+    suspend fun monthlyWeather(city:String) : MonthlyForecast? {
+        var a = outfitPickerStore.checkMonthlyWeatherByCity(city)
+        if (a == null) {
+            try {
+                outfitPickerStore.logger.d("retrieving monthly forecast using city $city")
+                a = outfitPickerStore.retrieveMonthlyForecastByCity(city)
+                outfitPickerStore.logger.d("got a response of $a")
+                outfitPickerStore.saveMonthlyWeatherbyCity(city, a)
+            } catch (e: Exception) {
+                println(e.message)
             }
-            job.start()
-            val a = job.await()
-            val b = _monthlyForecast.tryEmit(a)
-            b
         }
+        outfitPickerStore.logger.d("monthlyWeather: Returned from web call, doing try Emit for $a")
+        _monthlyForecast.tryEmit(a)
+        return a
     }
     var readyToSubmit = MutableSharedFlow<Boolean>(1)
+    var monthlyWeatherFlow = MutableSharedFlow<MonthlyForecast>(1)
     var currentWeatherFlow = MutableSharedFlow<MainTemperature>(1)
     fun changeAnonymousId() : String {
         val s = (1..Companion.STRING_LENGTH)

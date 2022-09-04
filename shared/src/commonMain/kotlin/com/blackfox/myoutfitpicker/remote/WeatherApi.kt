@@ -10,11 +10,33 @@ import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+val meteoUsername = BuildKonfig.meteo_username
+val meteoPassword = BuildKonfig.meteo_password
+
 class WeatherApi(private val client: HttpClient,
                  private val baseUrl: String = BuildKonfig.weather_client_host_name) {
     private val apiKey = BuildKonfig.api_key
     private val json = Json { isLenient = true; ignoreUnknownKeys = true; useAlternativeNames = false; prettyPrint = true }
 
+    suspend fun retrieveToken() : String {
+        client.plugin(HttpSend).intercept { request ->
+            val originalCall = execute(request)
+            if (originalCall.response.status.value !in 100..399) {
+                execute(request)
+            } else {
+                originalCall
+            }
+        }
+
+        val url = "https://login.meteomatics.com/api/v1/token"
+        client.get (url) {
+            contentType(ContentType.Application.Json)
+            header("Authorization", "Basic $meteoUsername:$meteoPassword")
+        }.also {
+            val ret = it.bodyAsText()
+            return ret
+        }
+    }
     suspend fun retrieveMonthlyForecastByCity(city:String) : MonthlyForecast? {
         client.plugin(HttpSend).intercept { request ->
             val originalCall = execute(request)

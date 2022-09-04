@@ -1,5 +1,6 @@
 package com.blackfox.myoutfitpicker
 
+import co.touchlab.kermit.Logger
 import com.blackfox.myoutfitpicker.remote.WeatherApi
 import com.blackfox.myoutfitpicker.viewmodel.SharedViewModel
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,7 @@ class OutfitPickerStore : KoinComponent {
     private val weatherApi: WeatherApi by inject()
     private val viewModel: SharedViewModel by inject()
     private val settingsStorage: SettingsStorage = SettingsStorage(viewModel = get())
+    val logger: Logger by inject()
 
     private val _disabledCategories: Flow<Set<String>> = settingsStorage.recentCities
     val fetchActiveUser = false

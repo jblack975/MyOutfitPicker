@@ -1,13 +1,14 @@
 
 object Versions {
-    const val kotlinCoroutines = "1.6.0-native-mt"
-    const val ktor = "2.0.0"
+    const val kotlinCoroutines = "1.6.3-native-mt"
+    const val ktor = "2.1.0"
     const val kotlinxSerialization = "1.3.2"
-    const val koin = "3.1.5"
+    const val koin = "3.2.0"
     const val lifecycle = "2.2.0-alpha01"
 
-    const val compose = "1.2.0-alpha08"
-    const val navCompose = "2.4.0-beta02"
+    const val compose = "1.3.0"
+    const val composeUi = "1.3.0-beta01"
+    const val navCompose = "2.5.1"
     const val slf4j = "1.7.30"
 
     const val kermit = "1.0.3"
@@ -17,7 +18,7 @@ object Versions {
 
 object AndroidSdk {
     const val min = 21
-    const val compile = 31
+    const val compile = 33
     const val target = compile
 }
 
@@ -29,11 +30,11 @@ object Deps {
 }
 
 object Compose {
-    const val ui = "androidx.compose.ui:ui:${Versions.compose}"
-    const val uiGraphics = "androidx.compose.ui:ui-graphics:${Versions.compose}"
-    const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
-    const val foundationLayout = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
-    const val material = "androidx.compose.material:material:${Versions.compose}"
+    const val ui = "androidx.compose.ui:ui:${Versions.composeUi}"
+    const val uiGraphics = "androidx.compose.ui:ui-graphics:${Versions.composeUi}"
+    const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.composeUi}"
+    const val foundationLayout = "androidx.compose.foundation:foundation-layout:${Versions.composeUi}"
+    const val material = "androidx.compose.material:material:${Versions.composeUi}"
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navCompose}"
     const val runtime = "androidx.navigation:navigation-compose:${Versions.navCompose}"
 }

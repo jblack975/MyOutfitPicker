@@ -35,7 +35,7 @@ fun Application.configureRouting() {
                         append("X-RapidAPI-Key", API_KEY)
                     }
                 }.body<CurrentForecast>()
-
+            println("current weather is $response")
             call.respond(HttpStatusCode.OK, response)
         }
         get("/weather/monthly") {
@@ -51,6 +51,7 @@ fun Application.configureRouting() {
                         append("X-RapidAPI-Key", API_KEY)
                     }
                 }.body<MonthlyForecast>()
+            println("monthly weather is $response")
             call.respond(HttpStatusCode.OK, response)
         }
         post("/outfit_data") {
